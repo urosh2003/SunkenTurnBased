@@ -1,0 +1,36 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class AggressiveStrategy : IStrategy
+{
+    public override void ExecuteTurn(NpcAI npcAI)
+    {
+        if (npcAI.gameObject.GetComponent<Character>().currentAP > 0 &&
+            GridEntitiesManager.instance.DistanceToTileWorld(npcAI.gameObject.transform.position,
+        PlayerManager.instance.transform.position) > npcAI.gameObject.GetComponent<Character>().basicAttackRange)
+        {
+            ActionContext actionContext = new ActionContext();
+            actionContext.targetedCharacter = PlayerManager.instance.playerCharacter;
+            MoveToCharacterAction moveAction = new MoveToCharacterAction(npcAI.GetComponent<Character>());
+            moveAction.UpdateContext(actionContext);
+            moveAction.Execute();
+        }
+        else if (npcAI.gameObject.GetComponent<Character>().currentAP >= 2)
+        {
+            npcAI.ThinkAndAct();
+        }
+        else
+            npcAI.EndTurn();
+    }
+
+    public override void Act(NpcAI npcAI)
+    {
+        BasicAttackAction attackAction = new BasicAttackAction(npcAI.gameObject.GetComponent<Character>());
+        ActionContext actionContext = new ActionContext();
+        actionContext.targetedTile = GridEntitiesManager.instance.GetCellFromPosition(PlayerManager.instance.transform.position);
+        attackAction.UpdateContext(actionContext);
+        attackAction.Execute();
+    }
+
+}
