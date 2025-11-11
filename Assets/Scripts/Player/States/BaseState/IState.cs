@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class IState
@@ -7,7 +8,7 @@ public abstract class IState
     public abstract void Enter();
     public abstract void Exit();
 
-    public abstract bool Execute();
+    public abstract Task<bool> Execute();
 
 
 }

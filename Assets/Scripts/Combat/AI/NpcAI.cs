@@ -78,7 +78,9 @@ public class NpcAI : MonoBehaviour
         }
 
         transform.position = target; // Ensure exact position
-        this.ActionDone();
+
+        if(TurnManager.instance.currentTurn == GetComponent<Character>())
+            this.ActionDone();
     }
 
     private float thinkTime = 1.5f;

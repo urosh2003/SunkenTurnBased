@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -28,6 +29,10 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (MinigameManager.instance.isActive)
+        {
+            return;
+        }
         Vector3 screenPosition = Input.mousePosition;
         screenPosition.z = Mathf.Abs(Camera.main.transform.position.z);
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
@@ -41,16 +46,28 @@ public class PlayerManager : MonoBehaviour
         currentState.Enter();
     }
 
-    public void Execute(InputAction.CallbackContext context)
+    public void Click(InputAction.CallbackContext context)
     {
         if (context.performed)
         {
-            bool finished = currentState.Execute();
-            if(finished)
+            if (MinigameManager.instance.isActive)
             {
-                currentState.Exit();
-                ResetState();
+                MinigameManager.instance.Hit();
             }
+            else
+            {
+                _ = Execute();
+            }
+        }
+    }
+
+    public async Task Execute()
+    {
+        bool finished = await currentState.Execute();
+        if (finished)
+        {
+            currentState.Exit();
+            ResetState();
         }
     }
 
@@ -88,6 +105,36 @@ public class PlayerManager : MonoBehaviour
         {
             currentState.Exit();
             currentState = new TargetingState(new BasicAttackAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+
+    public void Hook(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new PullEnemyAction(playerCharacter)); 
+            currentState.Enter();
+        }
+    }
+
+    public void HookSelf(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new PullSelfAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+
+    public void Whirlpool(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new WhirlpoolAction(playerCharacter));
             currentState.Enter();
         }
     }

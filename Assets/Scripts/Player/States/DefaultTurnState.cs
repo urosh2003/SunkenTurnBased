@@ -1,4 +1,5 @@
 
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class DefaultTurnState : IState
@@ -8,7 +9,7 @@ public class DefaultTurnState : IState
         throw new System.NotImplementedException();
     }
 
-    public override bool Execute()
+    public override async Task<bool> Execute()
     {
         return true;
     }

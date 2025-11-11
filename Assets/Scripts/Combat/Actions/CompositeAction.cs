@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CompositeAction : IAction
@@ -14,11 +15,11 @@ public class CompositeAction : IAction
         throw new System.NotImplementedException();
     }
 
-    public override bool Execute()
+    public override async Task<bool> Execute()
     {
         foreach (var action in actions)
         {
-            action.Execute();
+            await action.Execute();
         }
         return true;
     }

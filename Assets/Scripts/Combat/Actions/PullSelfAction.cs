@@ -1,46 +1,51 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 
-public class BasicAttackAction : IAction
+public class PullSelfAction : IAction
 {
     Vector3Int actorPosition;
-    public BasicAttackAction(Character actor) : base(actor)
+    int direction;
+    public PullSelfAction(Character actor) : base(actor)
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
         this.APcost = 2;
-        this.range = actor.basicAttackRange;
+        this.range = 3;
     }
 
     public async override Task<bool> Execute()
     {
         if (this.context.targetedTile != null &&
+            this.actor.currentAP >= this.APcost &&
+            this.context.targetedTile != actorPosition &&
+            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) == null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
-            && this.actor.currentAP >= this.APcost &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor
             )
         {
-            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile);
-            if (target != null)
-            {
-                int damage = await CalculateDamage();
-                target.TakeDamage(damage);
-            }
+            await CalculateCooldown();
             this.actor.ChangeAP(-this.APcost);
+            Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, context.targetedTile, GridEntityType.CHARACTER);
+            this.actor.MoveCharacter(newCharacterPosition);
             return true;
         }
         return false;
     }
 
-    private async Task<int> CalculateDamage()
+    private async Task<int> CalculateCooldown()
     {
         int damage = actor.basicAttackDamage;
         if (actor is PlayerCharacter)
         {
-            List<bool> results = await MinigameManager.instance.PlayMinigameOne();
+            List<bool> results = await MinigameManager.instance.PlayMinigameTwo();
             if (results[0])
+            {
+                damage += 1;
+            }
+            if(results[1])
             {
                 damage += 1;
             }
@@ -49,13 +54,11 @@ public class BasicAttackAction : IAction
     }
 
     public override void RedrawTiles()
-    { 
+    {
         if (this.context.targetedTile != null &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor
-            )
+            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range)
         {
-            SelectedTilesManager.instance.DrawRedXTargeting(this.context.targetedTile);
+            SelectedTilesManager.instance.DrawRedXTargetingEmpty(this.context.targetedTile);
         }
         else
         {

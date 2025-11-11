@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class MoveToCharacterAction : IAction
@@ -36,7 +37,7 @@ public class MoveToCharacterAction : IAction
         return true;
     }
 
-    public override bool Execute()
+    public override async Task<bool> Execute()
     {
         if (actor.currentAP >= APcost && APcost != 0)
         {

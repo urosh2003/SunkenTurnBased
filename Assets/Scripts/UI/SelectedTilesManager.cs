@@ -1,7 +1,9 @@
 using System;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.PlayerSettings;
 
 public class SelectedTilesManager : MonoBehaviour
 {
@@ -12,7 +14,7 @@ public class SelectedTilesManager : MonoBehaviour
     public Tile redXTile;
     public List<Character> currentlyTargeting;
 
-    public List<Vector3Int> oddYNeighboursDirectionVectors = new List<Vector3Int>{
+    public readonly Vector3Int[] oddYNeighboursDirectionVectors = new Vector3Int[]{
             new Vector3Int(+1, 0, 0),
             new Vector3Int(-1, 0, 0),
             new Vector3Int(0, +1, 0),
@@ -21,13 +23,13 @@ public class SelectedTilesManager : MonoBehaviour
             new Vector3Int(+1, -1, 0),
         };
 
-    public List<Vector3Int> evenYNeighboursDirectionVectors = new List<Vector3Int>{
+    public readonly Vector3Int[] evenYNeighboursDirectionVectors = new Vector3Int[]{
             new Vector3Int(+1, 0, 0),
             new Vector3Int(-1, 0, 0),
+            new Vector3Int(-1, +1, 0),
+            new Vector3Int(-1, -1, 0),
             new Vector3Int(0, +1, 0),
             new Vector3Int(0, -1, 0),
-            new Vector3Int(-1, -1, 0),
-            new Vector3Int(-1, +1, 0),
         };
 
 
@@ -73,9 +75,9 @@ public class SelectedTilesManager : MonoBehaviour
         List<Vector3Int> directions;
 
         if (startPosition.y % 2 == 0)
-            directions = evenYNeighboursDirectionVectors;
+            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
         else
-            directions = oddYNeighboursDirectionVectors;
+            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
 
 
         foreach (Vector3Int direction in directions)
@@ -94,6 +96,87 @@ public class SelectedTilesManager : MonoBehaviour
         {
             target.GetComponent<Highlight>().EnableHighlight();
             currentlyTargeting.Add(target);
+        }
+    }
+
+    public void DrawRedXTargetingEmpty(Vector3Int targetedTile)
+    {
+        ClearTargetingTiles();
+        Character target = GridEntitiesManager.instance.GetGameObjectAtTile(targetedTile);
+        if (target == null)
+        {
+            targetingTilemap.SetTile(targetedTile, redXTile);
+        }
+    }
+
+    public void DrawAllDirections(Vector3Int actorPosition, int range)
+    {
+        for (int dir = 0; dir < 6; dir++)
+        {
+            Vector3Int offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[dir] : oddYNeighboursDirectionVectors[dir];
+            Vector3Int pos = actorPosition;
+
+            for (int i = 1; i <= range; i++)
+            {
+                pos += offset;
+                offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[dir] : oddYNeighboursDirectionVectors[dir];
+
+                rangeTilemap.SetTile(pos, redTile);
+            }
+        }
+    }
+
+    public void DrawOneDirectionTarget(Vector3Int actorPosition, int range, int direction)
+    {
+        ClearTargetingTiles();
+
+        if(direction == -1)
+        {
+            return;
+        }
+
+        Vector3Int offset;
+        Vector3Int pos;
+
+        offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        pos = actorPosition;
+        for (int i = 1; i <= range; i++)
+        {
+            pos += new Vector3Int(offset.x, offset.y, 0);
+            offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+
+            targetingTilemap.SetTile(pos, redXTile);
+            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
+            if (target != null)
+            {
+                target.GetComponent<Highlight>().EnableHighlight();
+                currentlyTargeting.Add(target);
+                break;
+            }
+        }
+    }
+
+    internal void DrawCircleRedXTargeting(Vector3Int startPosition, int range)
+    {
+        ClearTargetingTiles();
+
+        if (range <= 0)
+        {
+            return;
+        }
+
+        List<Vector3Int> directions;
+
+        if (startPosition.y % 2 == 0)
+            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
+        else
+            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
+
+
+        foreach (Vector3Int direction in directions)
+        {
+            targetingTilemap.SetTile(startPosition + direction, redXTile);
+            DrawCircleRange(startPosition + direction, range - 1);
         }
     }
 }

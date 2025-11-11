@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class WaitingForTurnState : IState
@@ -7,7 +8,7 @@ public class WaitingForTurnState : IState
 
     }
 
-    public override bool Execute()
+    public override async Task<bool> Execute()
     {
         return false;
     }

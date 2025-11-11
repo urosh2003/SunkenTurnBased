@@ -20,7 +20,7 @@ public class GridEntitiesManager : MonoBehaviour
     public Dictionary<Vector3Int, Dictionary<GridEntityType, GameObject>> gridEntities = new Dictionary<Vector3Int, Dictionary<GridEntityType, GameObject>>();
     public Tilemap baseTilemap;
 
-    public List<Vector3Int> oddYNeighboursDirectionVectors = new List<Vector3Int>{
+    public readonly Vector3Int[] oddYNeighboursDirectionVectors = new Vector3Int[]{
             new Vector3Int(+1, 0, 0),
             new Vector3Int(-1, 0, 0),
             new Vector3Int(0, +1, 0),
@@ -29,13 +29,13 @@ public class GridEntitiesManager : MonoBehaviour
             new Vector3Int(+1, -1, 0),
         };
 
-    public List<Vector3Int> evenYNeighboursDirectionVectors = new List<Vector3Int>{
+    public readonly Vector3Int[] evenYNeighboursDirectionVectors = new Vector3Int[]{
             new Vector3Int(+1, 0, 0),
             new Vector3Int(-1, 0, 0),
+            new Vector3Int(-1, +1, 0),
+            new Vector3Int(-1, -1, 0),
             new Vector3Int(0, +1, 0),
             new Vector3Int(0, -1, 0),
-            new Vector3Int(-1, -1, 0),
-            new Vector3Int(-1, +1, 0),
         };
 
 
@@ -291,13 +291,13 @@ public class GridEntitiesManager : MonoBehaviour
 
         List<Vector3Int> directions;
 
-        if(tilePosition.y % 2 == 0)
-            directions = evenYNeighboursDirectionVectors;
+        if (tilePosition.y % 2 == 0)
+            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
         else
-            directions = oddYNeighboursDirectionVectors;
+            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
 
 
-        foreach(Vector3Int direction in directions)
+        foreach (Vector3Int direction in directions)
         {
             if((tilePosition+direction == goal) || IsTileWalkable(tilePosition + direction, gridEntityType))
             {
@@ -317,19 +317,17 @@ public class GridEntitiesManager : MonoBehaviour
         return gameObjects;
     }
 
-    /*
-    public List<Character> GetAdjacentGameObjects(Vector3 worldPosition) 
-    {
-        Vector3Int tilePosition = baseTilemap.WorldToCell(worldPosition);
 
+    public List<Character> GetAdjacentGameObjects(Vector3Int tilePosition)
+    {
         List<Vector3Int> directions;
 
-        List<Character> neighbours = new List<Character> ();
+        List<Character> neighbours = new List<Character>();
 
         if (tilePosition.y % 2 == 0)
-            directions = evenYNeighboursDirectionVectors;
+            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
         else
-            directions = oddYNeighboursDirectionVectors;
+            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
 
         foreach (Vector3Int direction in directions)
         {
@@ -346,5 +344,89 @@ public class GridEntitiesManager : MonoBehaviour
 
         return neighbours;
     }
-    */
+
+
+    public Character GetFirstCharacterInDirection(Vector3Int actorPosition, int range, int direction)
+    {
+        Character character = null;
+
+        Vector3Int offset;
+        Vector3Int pos;
+
+        offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        pos = actorPosition;
+        for (int i = 1; i <= range; i++)
+        {
+            pos += offset;
+            offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+
+            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
+            if (target != null)
+            {
+                character = target;
+                break;
+            }
+        }
+
+        return character;
+    }
+
+    public int GetDirection(Vector3Int startPosition, int range, Vector3Int targetedTile)
+    {
+        Vector3Int offset;
+        Vector3Int pos;
+        int direction = -1;
+        for (int dir = 0; dir < 6; dir++)
+        {
+            offset = startPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[dir] : oddYNeighboursDirectionVectors[dir];
+            pos = startPosition;
+
+            for (int i = 1; i <= range; i++)
+            {
+                pos += offset;
+                offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[dir] : oddYNeighboursDirectionVectors[dir];
+
+                if (pos == targetedTile)
+                {
+                    direction = dir;
+                    return direction;
+                }
+            }
+        }
+        return direction;
+    }
+
+    public Vector3 HookCharacter(Vector3Int actorPosition, int range, int direction)
+    {
+        Character character = null;
+
+
+        Vector3Int offset;
+        Vector3Int pos;
+
+        offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        pos = actorPosition;
+        for (int i = 1; i <= range; i++)
+        {
+            pos += new Vector3Int(offset.x, offset.y, 0);
+            offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+
+            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
+            if (target != null)
+            {
+                character = target;
+                break;
+            }
+        }
+
+        offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        Vector3Int newPosition = actorPosition + offset;
+        MoveEntityToTilePosition(pos, newPosition, GridEntityType.CHARACTER);
+        return baseTilemap.GetCellCenterWorld(newPosition);
+    }
+
+    public Vector3 GetCellCenter(Vector3Int targetedTile)
+    {
+        return baseTilemap.GetCellCenterWorld(targetedTile);
+    }
 }

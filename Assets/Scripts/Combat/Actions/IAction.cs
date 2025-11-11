@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public abstract class IAction
@@ -12,7 +13,7 @@ public abstract class IAction
 
     public int range;
 
-    public abstract bool Execute();
+    public abstract Task<bool> Execute();
 
     public virtual bool UpdateContext(ActionContext newContext)
     {

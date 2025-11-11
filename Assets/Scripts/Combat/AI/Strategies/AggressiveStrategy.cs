@@ -1,10 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class AggressiveStrategy : IStrategy
 {
-    public override void ExecuteTurn(NpcAI npcAI)
+    public override async Task ExecuteTurn(NpcAI npcAI)
     {
         if (npcAI.gameObject.GetComponent<Character>().currentAP > 0 &&
             GridEntitiesManager.instance.DistanceToTileWorld(npcAI.gameObject.transform.position,
@@ -14,7 +15,7 @@ public class AggressiveStrategy : IStrategy
             actionContext.targetedCharacter = PlayerManager.instance.playerCharacter;
             MoveToCharacterAction moveAction = new MoveToCharacterAction(npcAI.GetComponent<Character>());
             moveAction.UpdateContext(actionContext);
-            moveAction.Execute();
+            await moveAction.Execute();
         }
         else if (npcAI.gameObject.GetComponent<Character>().currentAP >= 2)
         {
@@ -24,13 +25,13 @@ public class AggressiveStrategy : IStrategy
             npcAI.EndTurn();
     }
 
-    public override void Act(NpcAI npcAI)
+    public override async Task Act(NpcAI npcAI)
     {
         BasicAttackAction attackAction = new BasicAttackAction(npcAI.gameObject.GetComponent<Character>());
         ActionContext actionContext = new ActionContext();
         actionContext.targetedTile = GridEntitiesManager.instance.GetCellFromPosition(PlayerManager.instance.transform.position);
         attackAction.UpdateContext(actionContext);
-        attackAction.Execute();
+        await attackAction.Execute();
     }
 
 }

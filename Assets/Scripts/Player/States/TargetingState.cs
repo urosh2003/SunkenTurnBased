@@ -1,3 +1,4 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class TargetingState : IState
@@ -9,9 +10,9 @@ public class TargetingState : IState
         this.selectedAction = action;
     }
 
-    public override bool Execute()
+    public override async Task<bool> Execute()
     {
-        bool finished = selectedAction.Execute();
+        bool finished = await selectedAction.Execute();
         return finished;
     }
 

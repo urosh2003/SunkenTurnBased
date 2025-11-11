@@ -119,7 +119,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: -6808351502452429084}
         m_TargetAssemblyTypeName: PlayerManager, Assembly-CSharp
-        m_MethodName: Execute
+        m_MethodName: Click
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

@@ -1,0 +1,90 @@
+using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
+using UnityEngine;
+using UnityEngine.TextCore.Text;
+
+public class PullEnemyAction : IAction
+{
+    Vector3Int actorPosition;
+    int direction;
+    public PullEnemyAction(Character actor) : base(actor)
+    {
+        this.actor = actor;
+        actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
+        this.APcost = 2;
+        this.range = 3;
+    }
+
+    public override bool UpdateContext(ActionContext newContext)
+    {
+        if (this.context.Equals(newContext))
+        {
+            return false;
+        }
+
+        this.context = newContext;
+        direction = GridEntitiesManager.instance.GetDirection(actorPosition, range, context.targetedTile);
+
+        return true;
+    }
+
+    public async override Task<bool> Execute()
+    {
+        if (this.context.targetedTile != null &&
+            this.actor.currentAP >= this.APcost &&
+            direction != -1
+            )
+        {
+            Character target = GridEntitiesManager.instance.GetFirstCharacterInDirection(actorPosition, range, direction);
+            if (target)
+            {
+                int damage = await CalculateDamage();
+                target.TakeDamage(damage);
+                if(target && target.currentHealth > 0)
+                {
+                    Vector3 newCharacterPosition = GridEntitiesManager.instance.HookCharacter(actorPosition, range, direction);
+                    target.MoveCharacter(newCharacterPosition);
+                }
+            }
+            this.actor.ChangeAP(-this.APcost);
+            return true;
+        }
+        return false;
+    }
+
+    private async Task<int> CalculateDamage()
+    {
+        int damage = actor.basicAttackDamage;
+        if (actor is PlayerCharacter)
+        {
+            List<bool> results = await MinigameManager.instance.PlayMinigameTwo();
+            if (results[0])
+            {
+                damage += 1;
+            }
+            if (results[1])
+            {
+                damage += 1;
+            }
+        }
+        return damage;
+    }
+
+    public override void RedrawTiles()
+    {
+        if (this.context.targetedTile != null)
+        {
+            SelectedTilesManager.instance.DrawOneDirectionTarget(actorPosition, range, direction);
+        }
+        else
+        {
+            SelectedTilesManager.instance.ClearTargetingTiles();
+        }
+    }
+
+    public override void DrawTiles()
+    {
+        SelectedTilesManager.instance.DrawAllDirections(actorPosition, this.range);
+    }
+}
