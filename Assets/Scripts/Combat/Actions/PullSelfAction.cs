@@ -23,10 +23,20 @@ public class PullSelfAction : IAction
             this.actor.currentAP >= this.APcost &&
             this.context.targetedTile != actorPosition &&
             GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) == null &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
+            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
+            !resolving
             )
         {
+            resolving = true;
+            if (actor is PlayerCharacter)
+            {
+                await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, GridEntitiesManager.instance.GetCellCenter(context.targetedTile));
+            }
             await CalculateCooldown();
+            if (actor is PlayerCharacter)
+            {
+                await CameraActionFocus.instance.MinigameDone();
+            }
             this.actor.ChangeAP(-this.APcost);
             Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, context.targetedTile, GridEntityType.CHARACTER);
             this.actor.MoveCharacter(newCharacterPosition);
@@ -56,11 +66,11 @@ public class PullSelfAction : IAction
     public override void RedrawTiles()
     {
         if (this.context.targetedTile != null &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range)
+            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && !resolving)
         {
             SelectedTilesManager.instance.DrawRedXTargetingEmpty(this.context.targetedTile);
         }
-        else
+        else if (!resolving)
         {
             SelectedTilesManager.instance.ClearTargetingTiles();
         }

@@ -19,16 +19,26 @@ public class WhirlpoolAction : IAction
         if (this.context.targetedTile != null &&
             this.actor.currentAP >= this.APcost &&
             this.context.targetedTile != actorPosition &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
+            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && 
+            !resolving
             )
         {
+            resolving = true;
             List<Character> targets = GridEntitiesManager.instance.GetAdjacentGameObjects(actorPosition);
             if (targets.Count != 0)
             {
+                if (actor is PlayerCharacter)
+                {
+                    await CameraActionFocus.instance.FocusOnSingleAsync(actor.transform);
+                }
                 List<int> damage = await CalculateDamage(targets);
                 for (int i = 0; i < targets.Count; i++)
                 {
                     targets[i].TakeDamage(damage[i]);
+                }
+                if (actor is PlayerCharacter)
+                {
+                    await CameraActionFocus.instance.MinigameDone();
                 }
             }
             this.actor.ChangeAP(-this.APcost);
@@ -58,12 +68,13 @@ public class WhirlpoolAction : IAction
     { 
         if (this.context.targetedTile != null &&
             this.context.targetedTile != actorPosition &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
+            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
+            !resolving
             )
         {
             SelectedTilesManager.instance.DrawCircleRedXTargeting(actorPosition, this.range);
         }
-        else
+        else if (!resolving)
         {
             SelectedTilesManager.instance.ClearTargetingTiles();
         }

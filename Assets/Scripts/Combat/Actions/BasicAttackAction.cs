@@ -19,16 +19,26 @@ public class BasicAttackAction : IAction
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
             && this.actor.currentAP >= this.APcost &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor
+            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor && 
+            !resolving
             )
         {
+            resolving = true;
             Character target = GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile);
             if (target != null)
             {
+                if (actor is PlayerCharacter)
+                {
+                    await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
+                }
                 int damage = await CalculateDamage();
                 target.TakeDamage(damage);
             }
             this.actor.ChangeAP(-this.APcost);
+            if (actor is PlayerCharacter)
+            {
+               await CameraActionFocus.instance.MinigameDone();
+            }
             return true;
         }
         return false;
@@ -52,12 +62,13 @@ public class BasicAttackAction : IAction
     { 
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor
+            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor &&
+            !resolving
             )
         {
             SelectedTilesManager.instance.DrawRedXTargeting(this.context.targetedTile);
         }
-        else
+        else if (!resolving)
         {
             SelectedTilesManager.instance.ClearTargetingTiles();
         }

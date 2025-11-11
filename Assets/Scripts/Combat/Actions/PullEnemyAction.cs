@@ -18,7 +18,7 @@ public class PullEnemyAction : IAction
 
     public override bool UpdateContext(ActionContext newContext)
     {
-        if (this.context.Equals(newContext))
+        if (this.context.Equals(newContext) || resolving)
         {
             return false;
         }
@@ -33,18 +33,28 @@ public class PullEnemyAction : IAction
     {
         if (this.context.targetedTile != null &&
             this.actor.currentAP >= this.APcost &&
-            direction != -1
+            direction != -1 &&
+            !resolving
             )
         {
+            resolving = true;
             Character target = GridEntitiesManager.instance.GetFirstCharacterInDirection(actorPosition, range, direction);
             if (target)
             {
+                if (actor is PlayerCharacter)
+                {
+                    await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
+                }
                 int damage = await CalculateDamage();
                 target.TakeDamage(damage);
                 if(target && target.currentHealth > 0)
                 {
                     Vector3 newCharacterPosition = GridEntitiesManager.instance.HookCharacter(actorPosition, range, direction);
                     target.MoveCharacter(newCharacterPosition);
+                }
+                if (actor is PlayerCharacter)
+                {
+                    await CameraActionFocus.instance.MinigameDone();
                 }
             }
             this.actor.ChangeAP(-this.APcost);
@@ -73,11 +83,11 @@ public class PullEnemyAction : IAction
 
     public override void RedrawTiles()
     {
-        if (this.context.targetedTile != null)
+        if (this.context.targetedTile != null && !resolving)
         {
             SelectedTilesManager.instance.DrawOneDirectionTarget(actorPosition, range, direction);
         }
-        else
+        else if(!resolving)
         {
             SelectedTilesManager.instance.ClearTargetingTiles();
         }

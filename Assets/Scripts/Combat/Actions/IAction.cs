@@ -12,12 +12,14 @@ public abstract class IAction
     public ActionContext context;
 
     public int range;
+    public bool resolving = false;
+
 
     public abstract Task<bool> Execute();
 
     public virtual bool UpdateContext(ActionContext newContext)
     {
-        if (this.context.Equals(newContext))
+        if (this.context.Equals(newContext) || resolving)
         {
             return false;
         }

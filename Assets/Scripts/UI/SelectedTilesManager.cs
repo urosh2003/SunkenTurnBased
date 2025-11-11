@@ -50,7 +50,10 @@ public class SelectedTilesManager : MonoBehaviour
         targetingTilemap.ClearAllTiles();
         foreach(Character target in currentlyTargeting)
         {
-            target.GetComponent<Highlight>().DisableHighlight();
+            if (target != null)
+            {
+                target.GetComponent<Highlight>().DisableHighlight();
+            }
         }
         currentlyTargeting.Clear();
     }

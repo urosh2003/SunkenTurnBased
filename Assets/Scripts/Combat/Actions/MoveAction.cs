@@ -16,7 +16,7 @@ public class MoveAction : IAction
 
     public override bool UpdateContext(ActionContext newContext)
     {
-        if (this.context.Equals(newContext))
+        if (this.context.Equals(newContext) || resolving)
         {
             return false;
         }
@@ -30,8 +30,9 @@ public class MoveAction : IAction
 
     public override async Task<bool> Execute()
     {
-        if (actor.currentAP >= APcost && APcost != 0)
+        if (actor.currentAP >= APcost && APcost != 0 && !resolving)
         {
+            resolving = true;
             Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, path[path.Count-1], GridEntityType.CHARACTER);
 
             if (this.actor.currentFreeMovement > 0)
@@ -47,7 +48,8 @@ public class MoveAction : IAction
 
     public override void RedrawTiles()
     {
-        SelectedTilesManager.instance.DrawTargetingPath(path, actor.currentAP);
+        if (!resolving)
+            SelectedTilesManager.instance.DrawTargetingPath(path, actor.currentAP);
     }
 
     public override void DrawTiles()
