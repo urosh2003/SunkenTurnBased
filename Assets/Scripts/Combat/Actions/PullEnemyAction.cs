@@ -85,7 +85,7 @@ public class PullEnemyAction : IAction
     {
         if (this.context.targetedTile != null && !resolving)
         {
-            SelectedTilesManager.instance.DrawOneDirectionTarget(actorPosition, range, direction);
+            SelectedTilesManager.instance.DrawOneDirection(actorPosition, range, direction, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
         }
         else if(!resolving)
         {
@@ -95,6 +95,6 @@ public class PullEnemyAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawAllDirections(actorPosition, this.range);
+        SelectedTilesManager.instance.DrawAllDirections(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

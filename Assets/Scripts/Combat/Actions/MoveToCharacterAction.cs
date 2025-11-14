@@ -56,7 +56,7 @@ public class MoveToCharacterAction : IAction
 
     public override void RedrawTiles()
     {
-        SelectedTilesManager.instance.DrawTargetingPath(path, actor.currentAP);
+        SelectedTilesManager.instance.DrawTargetingPath(path, actor.currentAP, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
     }
 
     public override void DrawTiles()

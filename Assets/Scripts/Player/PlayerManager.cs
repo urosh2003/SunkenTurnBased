@@ -138,4 +138,14 @@ public class PlayerManager : MonoBehaviour
             currentState.Enter();
         }
     }
+
+    public void Sink(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new TripleAttackAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
 }

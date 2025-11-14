@@ -68,7 +68,7 @@ public class PullSelfAction : IAction
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && !resolving)
         {
-            SelectedTilesManager.instance.DrawRedXTargetingEmpty(this.context.targetedTile);
+            SelectedTilesManager.instance.DrawSingleUnoccupied(this.context.targetedTile, new TileStyle(TileColor.GREEN, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -78,6 +78,6 @@ public class PullSelfAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawCircleRange(actorPosition, this.range);
+        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.GREEN, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

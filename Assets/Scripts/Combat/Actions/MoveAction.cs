@@ -49,7 +49,7 @@ public class MoveAction : IAction
     public override void RedrawTiles()
     {
         if (!resolving)
-            SelectedTilesManager.instance.DrawTargetingPath(path, actor.currentAP);
+            SelectedTilesManager.instance.DrawTargetingPath(path, actor.currentAP, new TileStyle(TileColor.GREEN, TileType.XTILE, TileLayer.TARGETING));
     }
 
     public override void DrawTiles()

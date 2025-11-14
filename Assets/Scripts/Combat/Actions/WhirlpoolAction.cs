@@ -72,7 +72,7 @@ public class WhirlpoolAction : IAction
             !resolving
             )
         {
-            SelectedTilesManager.instance.DrawCircleRedXTargeting(actorPosition, this.range);
+            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -82,6 +82,6 @@ public class WhirlpoolAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawCircleRange(actorPosition, this.range);
+        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

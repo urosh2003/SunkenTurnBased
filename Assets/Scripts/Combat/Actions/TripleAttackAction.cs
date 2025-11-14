@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class BasicAttackAction : IAction
+public class TripleAttackAction : IAction
 {
     Vector3Int actorPosition;
-    public BasicAttackAction(Character actor) : base(actor)
+    public TripleAttackAction(Character actor) : base(actor)
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
+        this.APcost = 3;
         this.range = actor.basicAttackRange;
     }
 
@@ -31,8 +31,14 @@ public class BasicAttackAction : IAction
                 {
                     await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
                 }
-                int damage = await CalculateDamage();
-                target.TakeDamage(damage);
+                List<int> damage = await CalculateDamage();
+                for (int i = 0; i < damage.Count; i++)
+                {
+                    if (target != null)
+                    {
+                        target.TakeDamage(damage[i]);
+                    }
+                }
             }
             this.actor.ChangeAP(-this.APcost);
             if (actor is PlayerCharacter)
@@ -44,15 +50,19 @@ public class BasicAttackAction : IAction
         return false;
     }
 
-    private async Task<int> CalculateDamage()
+    private async Task<List<int>> CalculateDamage()
     {
-        int damage = actor.basicAttackDamage;
+        List<int> damage = new();
         if (actor is PlayerCharacter)
         {
-            List<bool> results = await MinigameManager.instance.PlayMinigameOne();
-            if (results[0])
+            List<bool> results = await MinigameManager.instance.PlayMinigameThree();
+            for (int i = 0; i < results.Count; i++)
             {
-                damage += 1;
+                damage.Add(actor.basicAttackDamage);
+                if(results[i])
+                {
+                    damage[i] += 1;
+                }
             }
         }
         return damage;

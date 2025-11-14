@@ -3,7 +3,28 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static UnityEditor.PlayerSettings;
+
+
+public enum TileColor { RED, GREEN, YELLOW }
+public enum TileType { DEFAULT, XTILE }
+public enum TileLayer { TARGETING, RANGE }
+public struct TileStyle
+{
+    public TileColor primaryColor;
+    public TileColor secondaryColor;
+    public TileColor tertiaryColor;
+    public TileType type;
+    public TileLayer tileLayer;
+
+    public TileStyle(TileColor color, TileType type, TileLayer tileLayer, TileColor secondaryColor = TileColor.RED, TileColor tertiaryColor = TileColor.RED)
+    {
+        this.primaryColor = color;
+        this.type = type;
+        this.tileLayer = tileLayer;
+        this.secondaryColor = secondaryColor;
+        this.tertiaryColor = tertiaryColor;
+    }
+}
 
 public class SelectedTilesManager : MonoBehaviour
 {
@@ -12,6 +33,10 @@ public class SelectedTilesManager : MonoBehaviour
     public Tilemap rangeTilemap;
     public Tile redTile;
     public Tile redXTile;
+    public Tile yellowTile;
+    public Tile yellowXTile;
+    public Tile greenTile;
+    public Tile greenXTile;
     public List<Character> currentlyTargeting;
 
     public readonly Vector3Int[] oddYNeighboursDirectionVectors = new Vector3Int[]{
@@ -32,15 +57,49 @@ public class SelectedTilesManager : MonoBehaviour
             new Vector3Int(0, -1, 0),
         };
 
-
-    public void DrawTargetingPath(List<Vector3Int> tiles, int length)
+    private Tile GetTileByStyle(TileStyle tileStyle)
     {
-        ClearTargetingTiles();
+        switch ((tileStyle.primaryColor, tileStyle.type))
+        {
+            case (TileColor.RED, TileType.DEFAULT) :
+                return redTile;
+            case (TileColor.RED, TileType.XTILE):
+                return redXTile;
+            case (TileColor.GREEN, TileType.DEFAULT):
+                return greenTile;
+            case (TileColor.GREEN, TileType.XTILE):
+                return greenXTile;
+            case (TileColor.YELLOW, TileType.DEFAULT):
+                return yellowTile;
+            case (TileColor.YELLOW, TileType.XTILE):
+                return yellowXTile;
+        }
+        return redTile;
+    }
+    private Tilemap GetTilemapByStyle(TileStyle tileStyle)
+    {
+        switch (tileStyle.tileLayer)
+        {
+            case (TileLayer.TARGETING):
+                ClearTargetingTiles();
+                return targetingTilemap;
+            case (TileLayer.RANGE):
+                return rangeTilemap;
+
+        }
+        return targetingTilemap;
+    }
+
+
+    public void DrawTargetingPath(List<Vector3Int> tiles, int length, TileStyle tileStyle)
+    {
+        Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
+        Tile selectedTile = GetTileByStyle(tileStyle);
         int pathLength = 1;
         foreach (Vector3Int tile in tiles)
         {
             if (pathLength <= length)
-                targetingTilemap.SetTile(tile, redXTile);
+                selectedTilemap.SetTile(tile, selectedTile);
             pathLength++;
         }
     }
@@ -68,7 +127,7 @@ public class SelectedTilesManager : MonoBehaviour
         currentlyTargeting = new();
     }
 
-    public void DrawCircleRange(Vector3Int startPosition, int range)
+    public void DrawCircle(Vector3Int startPosition, int range, TileStyle tileStyle)
     {
         if(range <= 0)
         {
@@ -82,18 +141,22 @@ public class SelectedTilesManager : MonoBehaviour
         else
             directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
 
+        Tile selectedTile = GetTileByStyle(tileStyle);
+        Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
 
         foreach (Vector3Int direction in directions)
         {
-            rangeTilemap.SetTile(startPosition + direction, redTile);
-            DrawCircleRange(startPosition + direction, range-1);
+            selectedTilemap.SetTile(startPosition + direction, selectedTile);
+            DrawCircle(startPosition + direction, range-1, tileStyle);
         }
     }
 
-    public void DrawRedXTargeting(Vector3Int targetedTile)
+    public void DrawSingle(Vector3Int targetedTile, TileStyle tileStyle)
     {
-        ClearTargetingTiles();
-        targetingTilemap.SetTile(targetedTile, redXTile);
+        Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
+        Tile selectedTile = GetTileByStyle(tileStyle);
+
+        selectedTilemap.SetTile(targetedTile, selectedTile);
         Character target = GridEntitiesManager.instance.GetGameObjectAtTile(targetedTile);
         if(target != null)
         {
@@ -102,18 +165,23 @@ public class SelectedTilesManager : MonoBehaviour
         }
     }
 
-    public void DrawRedXTargetingEmpty(Vector3Int targetedTile)
+    public void DrawSingleUnoccupied(Vector3Int targetedTile, TileStyle tileStyle)
     {
-        ClearTargetingTiles();
+        Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
+        Tile selectedTile = GetTileByStyle(tileStyle);
+
         Character target = GridEntitiesManager.instance.GetGameObjectAtTile(targetedTile);
         if (target == null)
         {
-            targetingTilemap.SetTile(targetedTile, redXTile);
+            selectedTilemap.SetTile(targetedTile, selectedTile);
         }
     }
 
-    public void DrawAllDirections(Vector3Int actorPosition, int range)
+    public void DrawAllDirections(Vector3Int actorPosition, int range, TileStyle tileStyle)
     {
+        Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
+        Tile selectedTile = GetTileByStyle(tileStyle);
+
         for (int dir = 0; dir < 6; dir++)
         {
             Vector3Int offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[dir] : oddYNeighboursDirectionVectors[dir];
@@ -124,16 +192,18 @@ public class SelectedTilesManager : MonoBehaviour
                 pos += offset;
                 offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[dir] : oddYNeighboursDirectionVectors[dir];
 
-                rangeTilemap.SetTile(pos, redTile);
+                selectedTilemap.SetTile(pos, selectedTile);
             }
         }
     }
 
-    public void DrawOneDirectionTarget(Vector3Int actorPosition, int range, int direction)
+    public void DrawOneDirection(Vector3Int actorPosition, int range, int direction, TileStyle tileStyle)
     {
-        ClearTargetingTiles();
+        Tile selectedTile = GetTileByStyle(tileStyle);
+        Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
 
-        if(direction == -1)
+
+        if (direction == -1)
         {
             return;
         }
@@ -148,7 +218,7 @@ public class SelectedTilesManager : MonoBehaviour
             pos += new Vector3Int(offset.x, offset.y, 0);
             offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
 
-            targetingTilemap.SetTile(pos, redXTile);
+            selectedTilemap.SetTile(pos, selectedTile);
             Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
             if (target != null)
             {
@@ -156,30 +226,6 @@ public class SelectedTilesManager : MonoBehaviour
                 currentlyTargeting.Add(target);
                 break;
             }
-        }
-    }
-
-    internal void DrawCircleRedXTargeting(Vector3Int startPosition, int range)
-    {
-        ClearTargetingTiles();
-
-        if (range <= 0)
-        {
-            return;
-        }
-
-        List<Vector3Int> directions;
-
-        if (startPosition.y % 2 == 0)
-            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
-        else
-            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
-
-
-        foreach (Vector3Int direction in directions)
-        {
-            targetingTilemap.SetTile(startPosition + direction, redXTile);
-            DrawCircleRange(startPosition + direction, range - 1);
         }
     }
 }

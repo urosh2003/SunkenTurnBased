@@ -88,6 +88,26 @@ public class MinigameManager : MonoBehaviour
 
         return results;
     }
+    public async Task<List<bool>> PlayMinigameThree()
+    {
+        isActive = true;
+
+        minigameComplete = new TaskCompletionSource<List<bool>>();
+
+        minigame3.SetActive(true);
+        currentMinigame = minigame3.GetComponent<ChainMinigameThree>();
+
+        float randomTotal = timeTotal + Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
+        float randomSuccessStart = randomTotal * Random.Range(successStartRandomLow, successStartRandomHigh);
+        currentMinigame.StartMinigame(randomTotal, randomSuccessStart, randomSuccessStart + randomTotal * 0.1f);
+
+        List<bool> results = await minigameComplete.Task;
+
+        isActive = false;
+        currentMinigame = null;
+
+        return results;
+    }
 
     public void EndMinigame(List<bool> results)
     {
@@ -96,7 +116,7 @@ public class MinigameManager : MonoBehaviour
 
         minigame1.SetActive(false);
         minigame2.SetActive(false);
-        //minigame3.SetActive(false);
+        minigame3.SetActive(false);
         minigame4.SetActive(false);
     }
 
