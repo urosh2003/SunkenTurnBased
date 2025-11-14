@@ -57,13 +57,13 @@ public class NpcAI : MonoBehaviour
     public float moveDuration = 0.3f; // Time to reach target
     public AnimationCurve easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Default ease
 
-    public void MoveNpc(Vector3 targetPosition)
+    public void MoveNpc(Vector3 targetPosition, bool wholeAction)
     {
         moving = true;
-        StartCoroutine(MoveCoroutine(targetPosition, moveDuration));
+        StartCoroutine(MoveCoroutine(targetPosition, moveDuration, wholeAction));
     }
 
-    private IEnumerator MoveCoroutine(Vector3 target, float duration)
+    private IEnumerator MoveCoroutine(Vector3 target, float duration, bool wholeAction)
     {
         Vector3 startPos = transform.position;
         float elapsed = 0f;
@@ -79,8 +79,10 @@ public class NpcAI : MonoBehaviour
 
         transform.position = target; // Ensure exact position
 
-        if(TurnManager.instance.currentTurn == GetComponent<Character>())
+        if (wholeAction)
+        {
             this.ActionDone();
+        }
     }
 
     private float thinkTime = 1.5f;

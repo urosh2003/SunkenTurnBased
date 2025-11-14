@@ -17,9 +17,9 @@ public class NonPlayerCharacter : Character
         base.EndTurn();
     }
 
-    public override void MoveCharacter(Vector3 target)
+    public override void MoveCharacter(Vector3 target, bool wholeAction)
     {
-        this.gameObject.GetComponent<NpcAI>().MoveNpc(target);
+        this.gameObject.GetComponent<NpcAI>().MoveNpc(target, wholeAction);
     }
 
     public override void TakeDamage(int value)

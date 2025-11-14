@@ -40,7 +40,11 @@ public class ChainMinigameFour : IMinigame
             EndMinigame();
             return;
         }
-
+        if (results.Count == successZoneCount)
+        {
+            EndMinigame();
+            return;
+        }
         RotatePointer();
     }
 

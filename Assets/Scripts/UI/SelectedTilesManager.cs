@@ -228,4 +228,68 @@ public class SelectedTilesManager : MonoBehaviour
             }
         }
     }
+
+    internal void DrawTorpedostorm(Vector3Int actorPosition, int range, int direction)
+    {
+        if (direction == -1)
+        {
+            return;
+        }
+        ClearTargetingTiles();
+
+        Vector3Int offset;
+        Vector3Int pos;
+
+        offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        pos = actorPosition;
+
+        List<Vector3Int> directions;
+
+        if (pos.y % 2 == 0)
+            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
+        else
+            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
+
+        targetingTilemap.SetTile(pos, greenXTile);
+        foreach (Vector3Int basicDirection in directions)
+        {
+            if (targetingTilemap.GetTile(pos + basicDirection) == null)
+            {
+                targetingTilemap.SetTile(pos + basicDirection, redXTile);
+                Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos + basicDirection);
+                if (target != null)
+                {
+                    target.GetComponent<Highlight>().EnableHighlight();
+                    currentlyTargeting.Add(target);
+                }
+            }
+        }
+
+        for (int i = 1; i <= range; i++)
+        {
+            pos += new Vector3Int(offset.x, offset.y, 0);
+            offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+            targetingTilemap.SetTile(pos, greenXTile);
+
+
+            if (pos.y % 2 == 0)
+                directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
+            else
+                directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
+
+            foreach (Vector3Int basicDirection in directions)
+            {
+                if (targetingTilemap.GetTile(pos + basicDirection) == null)
+                {
+                    targetingTilemap.SetTile(pos + basicDirection, redXTile);
+                    Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos + basicDirection);
+                    if (target != null)
+                    {
+                        target.GetComponent<Highlight>().EnableHighlight();
+                        currentlyTargeting.Add(target);
+                    }
+                }
+            }
+        }
+    }
 }

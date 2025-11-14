@@ -50,7 +50,7 @@ public class PullEnemyAction : IAction
                 if(target && target.currentHealth > 0)
                 {
                     Vector3 newCharacterPosition = GridEntitiesManager.instance.HookCharacter(actorPosition, range, direction);
-                    target.MoveCharacter(newCharacterPosition);
+                    target.MoveCharacter(newCharacterPosition, false);
                 }
                 if (actor is PlayerCharacter)
                 {

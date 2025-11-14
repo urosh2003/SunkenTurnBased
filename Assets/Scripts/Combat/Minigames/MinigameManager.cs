@@ -22,8 +22,6 @@ public class MinigameManager : MonoBehaviour
 
     private TaskCompletionSource<List<bool>> minigameComplete;
 
-
-
     public bool isActive;
 
     private void Awake()

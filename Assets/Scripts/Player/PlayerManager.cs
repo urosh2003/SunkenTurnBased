@@ -148,4 +148,24 @@ public class PlayerManager : MonoBehaviour
             currentState.Enter();
         }
     }
+
+    public void Torpedostorm(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new TorpedostormAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+
+    public void ThrowTorpedo(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new ThrowTorpedoAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
 }

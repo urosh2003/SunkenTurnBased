@@ -39,7 +39,7 @@ public class PullSelfAction : IAction
             }
             this.actor.ChangeAP(-this.APcost);
             Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, context.targetedTile, GridEntityType.CHARACTER);
-            this.actor.MoveCharacter(newCharacterPosition);
+            this.actor.MoveCharacter(newCharacterPosition, true);
             return true;
         }
         return false;

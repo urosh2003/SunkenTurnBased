@@ -176,6 +176,17 @@ public class GridEntitiesManager : MonoBehaviour
         return MoveEntityToTilePosition(originalTilePosition, newTilePosition, gridEntityType);
     }
 
+    public Vector3 MoveCharacterInDirection(Vector3Int tilePosition, int chosenDirection)
+    {
+        Vector3Int direction;
+
+        if (tilePosition.y % 2 == 0)
+            direction = evenYNeighboursDirectionVectors[chosenDirection];
+        else
+            direction = oddYNeighboursDirectionVectors[chosenDirection];
+        return MoveEntityInDirection(tilePosition, direction, GridEntityType.CHARACTER);
+    }
+
 
     public List<Vector3Int> FindPath(Vector3Int start, Vector3Int goal, GridEntityType gridEntityType)
     {
