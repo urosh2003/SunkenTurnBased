@@ -19,12 +19,12 @@ public class TripleAttackAction : IAction
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
             && this.actor.currentAP >= this.APcost &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor && 
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor && 
             !resolving
             )
         {
             resolving = true;
-            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile);
+            Character target = GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile);
             if (target != null)
             {
                 if (actor is PlayerCharacter)
@@ -72,7 +72,7 @@ public class TripleAttackAction : IAction
     { 
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) != actor &&
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor &&
             !resolving
             )
         {

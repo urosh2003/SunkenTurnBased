@@ -45,7 +45,7 @@ public abstract class Character : MonoBehaviour
         OnEndTurn?.Invoke();
     }
 
-    public virtual void MoveCharacter(Vector3 target, bool wholeAction) { }
+    public virtual void MoveCharacter(Vector3 target, bool wholeAction = false) { }
 
     public virtual void RefreshResources()
     {

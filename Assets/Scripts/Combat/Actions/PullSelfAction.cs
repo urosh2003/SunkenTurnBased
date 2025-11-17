@@ -22,7 +22,7 @@ public class PullSelfAction : IAction
         if (this.context.targetedTile != null &&
             this.actor.currentAP >= this.APcost &&
             this.context.targetedTile != actorPosition &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) == null &&
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) == null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
             !resolving
             )

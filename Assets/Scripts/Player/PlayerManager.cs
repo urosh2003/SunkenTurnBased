@@ -168,4 +168,34 @@ public class PlayerManager : MonoBehaviour
             currentState.Enter();
         }
     }
+
+    public void ForceSlam(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new ForceSlamAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+
+    public void JumpSlam(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new JumpSlamAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+
+    public void Maelstorm(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new MaelstormAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
 }

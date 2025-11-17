@@ -46,7 +46,7 @@ public class GridEntitiesManager : MonoBehaviour
         // Load save file and set the entities on the map
     }
 
-    public Character GetGameObjectAtTile(Vector3Int tilePosition)
+    public Character GetCharacterAtTile(Vector3Int tilePosition)
     {
         gridEntities.TryGetValue(tilePosition, out Dictionary<GridEntityType, GameObject> gameObjects);
 
@@ -232,7 +232,7 @@ public class GridEntitiesManager : MonoBehaviour
             path.Add(next);
             current = next;
         }
-        if (GetGameObjectAtTile(goal) != null && path.Count > 1)
+        if (GetCharacterAtTile(goal) != null && path.Count > 1)
         {
             path.RemoveAt(0);
         }
@@ -371,7 +371,7 @@ public class GridEntitiesManager : MonoBehaviour
             pos += offset;
             offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
 
-            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
+            Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos);
             if (target != null)
             {
                 character = target;
@@ -422,7 +422,7 @@ public class GridEntitiesManager : MonoBehaviour
             pos += new Vector3Int(offset.x, offset.y, 0);
             offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
 
-            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
+            Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos);
             if (target != null)
             {
                 character = target;
@@ -440,4 +440,101 @@ public class GridEntitiesManager : MonoBehaviour
     {
         return baseTilemap.GetCellCenterWorld(targetedTile);
     }
+
+    public List<Character> GetCharactersInRange(Vector3Int startTile, int range)
+    {
+        HashSet<Vector3Int> visited = new HashSet<Vector3Int>();
+        Queue<(Vector3Int pos, int dist)> frontier = new Queue<(Vector3Int, int)>();
+
+        List<Character> result = new List<Character>();
+
+        frontier.Enqueue((startTile, 0));
+        visited.Add(startTile);
+
+        while (frontier.Count > 0)
+        {
+            var (currentTile, distance) = frontier.Dequeue();
+
+            // Check for a character on this tile (but skip the center unless you want self)
+            if (gridEntities.TryGetValue(currentTile, out var gameObjects))
+            {
+                if (gameObjects.TryGetValue(GridEntityType.CHARACTER, out GameObject charObj))
+                {
+                    if (distance != 0)
+                    {
+                        result.Add(charObj.GetComponent<Character>());
+                    }
+                }
+            }
+
+            // Stop expanding when max range reached
+            if (distance >= range)
+                continue;
+
+            // Get the correct neighbor list (odd/even offset hex)
+            Vector3Int[] dirs = (currentTile.y % 2 == 0)
+                ? evenYNeighboursDirectionVectors
+                : oddYNeighboursDirectionVectors;
+
+            // Expand to neighbors
+            foreach (var dir in dirs)
+            {
+                Vector3Int nextTile = currentTile + dir;
+
+                if (visited.Contains(nextTile))
+                    continue;
+
+                visited.Add(nextTile);
+                frontier.Enqueue((nextTile, distance + 1));
+            }
+        }
+
+        return result;
+    }
+        public List<Vector3Int> StepTowardTile(Vector3Int from, Vector3Int to)
+        {
+            Vector3Int[] dirs = (from.y % 2 == 0)
+                ? evenYNeighboursDirectionVectors
+                : oddYNeighboursDirectionVectors;
+
+            List<Vector3Int> old = new List<Vector3Int>();
+            old.Add(from);
+            int orgDist = (int)DistanceToTile(from, to);
+            List<Vector3Int> candidates = new List<Vector3Int>();
+
+            foreach (var dir in dirs)
+            {
+                Vector3Int candidate = from + dir;
+                int dist = (int)DistanceToTile(candidate, to);
+                if (dist < orgDist)
+                {
+                    candidates.Add(candidate);
+                }
+            }
+            if (candidates.Count > 0) {
+                return candidates;
+            }
+            return old;
+        }
+        public Vector3Int TryMoveCharacter(Character character, List<Vector3Int> destinations)
+        {
+            Vector3Int oldPos = GetCellFromPosition(character.transform.position);
+            foreach (Vector3Int destination in destinations)
+            {
+                if (GetCharacterAtTile(destination))
+                    continue;
+
+                // Remove from old tile
+                gridEntities[oldPos].Remove(GridEntityType.CHARACTER);
+
+                // Add to new tile
+                if (!gridEntities.ContainsKey(destination))
+                    gridEntities[destination] = new Dictionary<GridEntityType, GameObject>();
+
+                gridEntities[destination][GridEntityType.CHARACTER] = character.gameObject;
+                return destination;
+            }
+            return Vector3Int.back;
+        }
+
 }

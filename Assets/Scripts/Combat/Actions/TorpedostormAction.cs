@@ -36,7 +36,7 @@ public class TorpedostormAction : IAction
         Character target = GridEntitiesManager.instance.GetFirstCharacterInDirection(actorPosition, distance, direction);
         if (this.context.targetedTile != null &&
             this.actor.currentAP >= this.APcost &&
-            GridEntitiesManager.instance.GetGameObjectAtTile(context.targetedTile) == null &&
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) == null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) > 0 &&
             direction != -1 &&

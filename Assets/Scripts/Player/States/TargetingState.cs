@@ -26,7 +26,10 @@ public class TargetingState : IState
         bool contextUpdated = selectedAction.UpdateContext(newContext);
         if (contextUpdated)
         {
+            SelectedTilesManager.instance.ClearTargetingTiles();
             selectedAction.RedrawTiles();
+            SelectedTilesManager.instance.DrawSingle(GridEntitiesManager.instance.GetCellFromPosition(PlayerManager.instance.playerCharacter.transform.position)
+                , new TileStyle(TileColor.GREEN, TileType.DEFAULT, TileLayer.TARGETING));
         }
     }
 

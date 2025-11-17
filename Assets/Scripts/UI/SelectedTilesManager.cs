@@ -81,7 +81,6 @@ public class SelectedTilesManager : MonoBehaviour
         switch (tileStyle.tileLayer)
         {
             case (TileLayer.TARGETING):
-                ClearTargetingTiles();
                 return targetingTilemap;
             case (TileLayer.RANGE):
                 return rangeTilemap;
@@ -147,6 +146,15 @@ public class SelectedTilesManager : MonoBehaviour
         foreach (Vector3Int direction in directions)
         {
             selectedTilemap.SetTile(startPosition + direction, selectedTile);
+            if(selectedTilemap == targetingTilemap)
+            {
+                Character target = GridEntitiesManager.instance.GetCharacterAtTile(startPosition + direction);
+                if (target != null)
+                {
+                    target.GetComponent<Highlight>().EnableHighlight();
+                    currentlyTargeting.Add(target);
+                }
+            }
             DrawCircle(startPosition + direction, range-1, tileStyle);
         }
     }
@@ -157,7 +165,7 @@ public class SelectedTilesManager : MonoBehaviour
         Tile selectedTile = GetTileByStyle(tileStyle);
 
         selectedTilemap.SetTile(targetedTile, selectedTile);
-        Character target = GridEntitiesManager.instance.GetGameObjectAtTile(targetedTile);
+        Character target = GridEntitiesManager.instance.GetCharacterAtTile(targetedTile);
         if(target != null)
         {
             target.GetComponent<Highlight>().EnableHighlight();
@@ -170,7 +178,7 @@ public class SelectedTilesManager : MonoBehaviour
         Tilemap selectedTilemap = GetTilemapByStyle(tileStyle);
         Tile selectedTile = GetTileByStyle(tileStyle);
 
-        Character target = GridEntitiesManager.instance.GetGameObjectAtTile(targetedTile);
+        Character target = GridEntitiesManager.instance.GetCharacterAtTile(targetedTile);
         if (target == null)
         {
             selectedTilemap.SetTile(targetedTile, selectedTile);
@@ -219,7 +227,7 @@ public class SelectedTilesManager : MonoBehaviour
             offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
 
             selectedTilemap.SetTile(pos, selectedTile);
-            Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos);
+            Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos);
             if (target != null)
             {
                 target.GetComponent<Highlight>().EnableHighlight();
@@ -256,7 +264,7 @@ public class SelectedTilesManager : MonoBehaviour
             if (targetingTilemap.GetTile(pos + basicDirection) == null)
             {
                 targetingTilemap.SetTile(pos + basicDirection, redXTile);
-                Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos + basicDirection);
+                Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos + basicDirection);
                 if (target != null)
                 {
                     target.GetComponent<Highlight>().EnableHighlight();
@@ -282,7 +290,7 @@ public class SelectedTilesManager : MonoBehaviour
                 if (targetingTilemap.GetTile(pos + basicDirection) == null)
                 {
                     targetingTilemap.SetTile(pos + basicDirection, redXTile);
-                    Character target = GridEntitiesManager.instance.GetGameObjectAtTile(pos + basicDirection);
+                    Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos + basicDirection);
                     if (target != null)
                     {
                         target.GetComponent<Highlight>().EnableHighlight();
@@ -290,6 +298,34 @@ public class SelectedTilesManager : MonoBehaviour
                     }
                 }
             }
+        }
+    }
+
+    internal void DeleteCircle(Vector3Int startPosition, int range, TileStyle tileStyle)
+    {
+        if (range <= 0)
+        {
+            return;
+        }
+
+        List<Vector3Int> directions;
+
+        if (startPosition.y % 2 == 0)
+            directions = new List<Vector3Int>(evenYNeighboursDirectionVectors);
+        else
+            directions = new List<Vector3Int>(oddYNeighboursDirectionVectors);
+        Tilemap selectedTilemap = null;
+        if (tileStyle.tileLayer == TileLayer.TARGETING)
+        {
+            selectedTilemap = targetingTilemap;
+        }
+        else if (tileStyle.tileLayer == TileLayer.RANGE)
+        {
+            selectedTilemap = rangeTilemap;
+        }
+        foreach (Vector3Int direction in directions)
+        {
+            selectedTilemap.SetTile(startPosition + direction, null);
         }
     }
 }

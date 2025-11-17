@@ -5,20 +5,18 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.TextCore.Text;
 
-public class ThrowTorpedoAction : IAction
+public class ForceSlamAction : IAction
 {
     Vector3Int actorPosition;
     Vector3Int targetPosition;
     Character target;
     int phase = 0;
-    int minRange;
-    public ThrowTorpedoAction(Character actor) : base(actor)
+    public ForceSlamAction(Character actor) : base(actor)
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
         this.APcost = 2;
-        this.range = 3;
-        this.minRange = 2;
+        this.range = 1;
         this.phase = 1;
     }
 
@@ -29,7 +27,6 @@ public class ThrowTorpedoAction : IAction
             this.context.targetedTile != actorPosition &&
             GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) >= this.minRange &&
             this.phase == 1 &&
             !resolving
             )
@@ -61,7 +58,7 @@ public class ThrowTorpedoAction : IAction
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);
             }
-            
+           
             this.actor.ChangeAP(-this.APcost);
 
             if (actor is PlayerCharacter)
@@ -94,8 +91,7 @@ public class ThrowTorpedoAction : IAction
     public override void RedrawTiles()
     {
         if (this.context.targetedTile != null &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && !resolving && this.phase == 1 &&
-            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) >= this.minRange)
+            GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && !resolving && this.phase == 1)
         {
             SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
         }
@@ -119,7 +115,8 @@ public class ThrowTorpedoAction : IAction
         if (phase == 1)
         {
             SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
-            SelectedTilesManager.instance.DeleteCircle(actorPosition, this.range - this.minRange, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+            SelectedTilesManager.instance.DrawSingle(actorPosition, new TileStyle(TileColor.GREEN, TileType.DEFAULT, TileLayer.RANGE));
+
         }
         else 
         {
