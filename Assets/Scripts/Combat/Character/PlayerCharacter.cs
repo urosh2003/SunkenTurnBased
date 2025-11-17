@@ -14,6 +14,7 @@ public class PlayerCharacter : Character
     {
         RefreshResources();
         OnStartPlayerTurn?.Invoke();
+        //OnCharacterStartTurn?.Invoke();
         this.gameObject.GetComponent<Highlight>().EnableHighlight();
 
     }
@@ -23,6 +24,7 @@ public class PlayerCharacter : Character
         if (TurnManager.instance.currentTurn == this)
         {
             this.gameObject.GetComponent<Highlight>().DisableHighlight();
+            //OnCharacterEndTurn?.Invoke();
             OnEndPlayerTurn?.Invoke();
         }
     }

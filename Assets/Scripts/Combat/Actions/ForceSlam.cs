@@ -60,6 +60,7 @@ public class ForceSlamAction : IAction
             }
            
             this.actor.ChangeAP(-this.APcost);
+            this.actor.CharacterAttacked(new List<Character> { target });
 
             if (actor is PlayerCharacter)
             {

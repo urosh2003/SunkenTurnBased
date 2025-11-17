@@ -46,7 +46,6 @@ public class PullEnemyAction : IAction
                     await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
                 }
                 int damage = await CalculateDamage();
-                target.TakeDamage(damage);
                 if(target && target.currentHealth > 0)
                 {
                     Vector3 newCharacterPosition = GridEntitiesManager.instance.HookCharacter(actorPosition, range, direction);

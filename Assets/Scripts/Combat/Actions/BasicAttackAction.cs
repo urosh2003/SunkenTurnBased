@@ -35,6 +35,7 @@ public class BasicAttackAction : IAction
                 target.TakeDamage(damage);
             }
             this.actor.ChangeAP(-this.APcost);
+            this.actor.CharacterAttacked(new List<Character> { target });
             if (actor is PlayerCharacter)
             {
                await CameraActionFocus.instance.MinigameDone();

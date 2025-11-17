@@ -66,6 +66,7 @@ public class PlayerManager : MonoBehaviour
         bool finished = await currentState.Execute();
         if (finished)
         {
+            playerCharacter.CharacterActed();
             currentState.Exit();
             ResetState();
         }
@@ -195,6 +196,25 @@ public class PlayerManager : MonoBehaviour
         {
             currentState.Exit();
             currentState = new TargetingState(new MaelstormAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+    public void EngineOff(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new EngineOffAction(playerCharacter));
+            currentState.Enter();
+        }
+    }
+
+    public void SpareChain(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState)
+        {
+            currentState.Exit();
+            currentState = new TargetingState(new SpareChainAction(playerCharacter));
             currentState.Enter();
         }
     }

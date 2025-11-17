@@ -8,6 +8,7 @@ public class AggressiveStrategy : IStrategy
     public override async Task ExecuteTurn(NpcAI npcAI)
     {
         if (npcAI.gameObject.GetComponent<Character>().currentAP > 0 &&
+            npcAI.gameObject.GetComponent<Character>().canMove &&
             GridEntitiesManager.instance.DistanceToTileWorld(npcAI.gameObject.transform.position,
         PlayerManager.instance.transform.position) > npcAI.gameObject.GetComponent<Character>().basicAttackRange)
         {
@@ -17,12 +18,17 @@ public class AggressiveStrategy : IStrategy
             moveAction.UpdateContext(actionContext);
             await moveAction.Execute();
         }
-        else if (npcAI.gameObject.GetComponent<Character>().currentAP >= 2)
+        else if (npcAI.gameObject.GetComponent<Character>().currentAP >= 2 &&
+                GridEntitiesManager.instance.DistanceToTileWorld(npcAI.gameObject.transform.position,
+                PlayerManager.instance.transform.position) <= npcAI.gameObject.GetComponent<Character>().basicAttackRange)
         {
+            await Act(npcAI);
             npcAI.ThinkAndAct();
         }
         else
+        {
             npcAI.EndTurn();
+        }
     }
 
     public override async Task Act(NpcAI npcAI)

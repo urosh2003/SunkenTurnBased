@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -16,20 +17,14 @@ public class NpcAI : MonoBehaviour
 
     public int movementElapsed = 0;
 
-
-    internal void ExecuteTurn()
-    {     
-        currentStrategy.ExecuteTurn(this);       
+    internal void StartTurn()
+    {
+        ThinkAndAct();       
     }
 
     private void Start()
     {
         currentStrategy = new AggressiveStrategy();
-    }
-
-    public void ActionDone()
-    {
-        ExecuteTurn();
     }
 
     private void Update()
@@ -41,18 +36,6 @@ public class NpcAI : MonoBehaviour
     {
         this.gameObject.GetComponent<Character>().EndTurn();
     }
-
-    public void DrawMovement()
-    {
-        if (movementPath != null)
-            ColorPath(movementPath);
-    }
-
-    private void ColorPath(List<Vector3Int> path)
-    {
-        
-    }
-
 
     public float moveDuration = 0.3f; // Time to reach target
     public AnimationCurve easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Default ease
@@ -81,11 +64,11 @@ public class NpcAI : MonoBehaviour
 
         if (wholeAction)
         {
-            this.ActionDone();
+            ThinkAndAct();
         }
     }
 
-    private float thinkTime = 1.5f;
+    [SerializeField] private float thinkTime = 0.5f;
 
     public void ThinkAndAct()
     {
@@ -95,14 +78,25 @@ public class NpcAI : MonoBehaviour
 
     private IEnumerator ThinkAndActCoroutine()
     {
-        yield return new WaitForSeconds(thinkTime);
+        float elapsed = 0f;
 
-        Act();
+        while (elapsed < thinkTime)
+        {
+            elapsed += Time.deltaTime;
+            yield return null; // Wait until next frame
+        }
+
+        _ = ActAsync();
     }
 
-    private void Act()
+    async Task ActAsync()
     {
-        this.currentStrategy.Act(this);
-        this.ActionDone();
+        if (!this.gameObject.GetComponent<Character>().canAct)
+        {
+            EndTurn();
+            return;
+        }
+
+        await currentStrategy.ExecuteTurn(this);
     }
 }

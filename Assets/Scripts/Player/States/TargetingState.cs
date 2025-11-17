@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 public class TargetingState : IState
 {
@@ -12,12 +13,22 @@ public class TargetingState : IState
 
     public override async Task<bool> Execute()
     {
+        if(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            return false;
+        }
         bool finished = await selectedAction.Execute();
         return finished;
     }
 
     public override void Update(Vector3 mouseWorldPosition)
     {
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            SelectedTilesManager.instance.ClearTargetingTiles();
+            return;
+        }
+
         Vector3Int targetedTile = GridEntitiesManager.instance.GetCellFromPosition(mouseWorldPosition);
 
         ActionContext newContext = new ActionContext();

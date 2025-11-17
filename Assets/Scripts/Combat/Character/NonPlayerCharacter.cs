@@ -9,7 +9,7 @@ public class NonPlayerCharacter : Character
         Debug.Log("NPC");
         base.StartTurn();
         this.gameObject.GetComponent<Highlight>().EnableHighlight();
-        this.gameObject.GetComponent<NpcAI>().ExecuteTurn();
+        this.gameObject.GetComponent<NpcAI>().StartTurn();
     }
     public override void EndTurn()
     {

@@ -41,6 +41,8 @@ public class WhirlpoolAction : IAction
                     await CameraActionFocus.instance.MinigameDone();
                 }
             }
+
+            this.actor.CharacterAttacked(targets);
             this.actor.ChangeAP(-this.APcost);
             return true;
         }

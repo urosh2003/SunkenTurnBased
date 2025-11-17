@@ -29,6 +29,17 @@ public abstract class Character : MonoBehaviour
     public int basicAttackDamage;
     public int basicAttackRange;
 
+    public List<StatusEffect> activeEffects = new();
+    public event Action OnCharacterStartTurn;
+    public event Action OnCharacterEndTurn;
+    public event Action OnCharacterMove;
+    public event Action<List<Character>> OnCharacterAttack;
+    public event Action OnCharacterAct;
+
+    public bool canMove = true;
+    public bool canAct = true;
+    public bool canAttack = true;
+
     private void Start()
     {
         sprite = this.gameObject.gameObject.GetComponent<SpriteRenderer>();
@@ -37,20 +48,37 @@ public abstract class Character : MonoBehaviour
     public virtual void StartTurn()
     {
         RefreshResources();
+        OnCharacterStartTurn?.Invoke();
         OnStartTurn?.Invoke(this.gameObject);
     }
 
     public virtual void EndTurn()
     {
+        OnCharacterEndTurn?.Invoke();
         OnEndTurn?.Invoke();
     }
 
-    public virtual void MoveCharacter(Vector3 target, bool wholeAction = false) { }
+    public virtual void MoveCharacter(Vector3 target, bool wholeAction = false) {
+        OnCharacterMove?.Invoke();     
+    }
+
+    public virtual void CharacterAttacked(List<Character> targets)
+    {
+        OnCharacterAttack?.Invoke(targets);
+    }
+
+    public virtual void CharacterActed()
+    {
+        OnCharacterAct?.Invoke();
+    }
 
     public virtual void RefreshResources()
     {
         this.currentFreeMovement = this.maxFreeMovement;
         this.currentAP += this.maxAP;
+        this.canMove = true;
+        this.canAttack = true;
+        this.canAct = true;
     }
 
     public virtual void ChangeAP(int value)
@@ -89,5 +117,72 @@ public abstract class Character : MonoBehaviour
     public virtual bool CanMove()
     {
         return this.currentAP > 0 || this.currentFreeMovement > 0;
+    }
+
+    public void AddStatusEffect(StatusEffect effect)
+    {
+        // Replace existing effect of the same typeName
+        StatusEffect existing = activeEffects.Find(e => e.name == effect.name);
+        if (existing != null)
+        {
+            //existing.duration = effect.duration;   // refresh duration
+            return;
+        }
+
+        activeEffects.Add(effect);
+    }
+
+    public void RemoveStatusEffect(StatusEffectName name)
+    {
+        // Collect the ones we are going to remove
+        var removeList = activeEffects.FindAll(e => e.name == name);
+
+        // Call Remove
+        foreach (var effect in removeList)
+            effect.Remove();
+    }
+
+
+    public List<StatusEffect> GetActiveBuffs()
+    {
+        return activeEffects.FindAll(e => e.type == StatusEffectType.BUFF);
+    }
+    public List<StatusEffect> GetActiveDebuffs()
+    {
+        return activeEffects.FindAll(e => e.type == StatusEffectType.DEBUFF);
+    }
+    public bool HasStatusEffect(StatusEffectName name)
+    {
+        return activeEffects.Exists(e => e.name == name);
+    }
+    public void RemoveAllBuffs()
+    {
+        var removeList = activeEffects.FindAll(e => e.type == StatusEffectType.BUFF);
+
+        foreach (var effect in removeList)
+            effect.Remove();
+    }
+
+
+    public void RemoveAllDebuffs()
+    {
+        var removeList = activeEffects.FindAll(e => e.type == StatusEffectType.DEBUFF);
+
+        foreach (var effect in removeList)
+            effect.Remove();
+    }
+
+
+    public void CantMove()
+    {
+        this.canMove = false;
+    }
+    public void CantAct()
+    {
+        this.canAct = false;
+    }
+    public void CantAttack()
+    {
+        this.canAttack = false;
     }
 }

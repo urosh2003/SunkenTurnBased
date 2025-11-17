@@ -98,6 +98,8 @@ public class MaelstormAction : IAction
                 }
             }
             this.actor.ChangeAP(-this.APcost);
+            this.actor.CharacterAttacked(targets);
+
             return true;
         }
         return false;

@@ -3,15 +3,17 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class TripleAttackAction : IAction
+public class SpareChainAction : IAction
 {
     Vector3Int actorPosition;
-    public TripleAttackAction(Character actor) : base(actor)
+    int duration;
+    public SpareChainAction(Character actor) : base(actor)
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 3;
+        this.APcost = 2;
         this.range = actor.basicAttackRange;
+        this.duration = 1;
     }
 
     public async override Task<bool> Execute()
@@ -19,7 +21,8 @@ public class TripleAttackAction : IAction
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
             && this.actor.currentAP >= this.APcost &&
-            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor && 
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor &&
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != null &&
             !resolving
             )
         {
@@ -31,46 +34,36 @@ public class TripleAttackAction : IAction
                 {
                     await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
                 }
-                List<int> damage = await CalculateDamage();
-                for (int i = 0; i < damage.Count; i++)
-                {
-                    if (target != null)
-                    {
-                        target.TakeDamage(damage[i]);
-                        this.actor.CharacterAttacked(new List<Character> { target });
-                    }
-                }
+                int damage = await CalculateDamage();
+                target.AddStatusEffect(new RootEffect(this.duration,target));
             }
             this.actor.ChangeAP(-this.APcost);
+            this.actor.CharacterAttacked(new List<Character> { target });
             if (actor is PlayerCharacter)
             {
-               await CameraActionFocus.instance.MinigameDone();
+                await CameraActionFocus.instance.MinigameDone();
             }
             return true;
         }
         return false;
     }
 
-    private async Task<List<int>> CalculateDamage()
+    private async Task<int> CalculateDamage()
     {
-        List<int> damage = new();
+        int damage = actor.basicAttackDamage;
         if (actor is PlayerCharacter)
         {
-            List<bool> results = await MinigameManager.instance.PlayMinigameThree();
-            for (int i = 0; i < results.Count; i++)
+            List<bool> results = await MinigameManager.instance.PlayMinigameOne();
+            if (results[0])
             {
-                damage.Add(actor.basicAttackDamage);
-                if(results[i])
-                {
-                    damage[i] += 1;
-                }
+                damage += 1;
             }
         }
         return damage;
     }
 
     public override void RedrawTiles()
-    { 
+    {
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range &&
             GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor &&

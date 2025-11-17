@@ -72,11 +72,13 @@ public class TorpedostormAction : IAction
                         actor.MoveCharacter(newCharacterPosition, false);
                     }
                     currentStep++;
+                    this.actor.CharacterAttacked(targets);
 
                     // Small delay for visual effect
                     await Task.Delay(100);
                 }
             }
+
             this.actor.ChangeAP(-this.APcost);
             if (actor is PlayerCharacter)
             {
