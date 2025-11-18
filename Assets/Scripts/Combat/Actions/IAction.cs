@@ -13,7 +13,7 @@ public abstract class IAction
 
     public int range;
     public bool resolving = false;
-
+    public int cooldown;
 
     public abstract Task<bool> Execute();
 

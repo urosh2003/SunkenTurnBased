@@ -15,8 +15,8 @@ public class PlayerCharacter : Character
         RefreshResources();
         OnStartPlayerTurn?.Invoke();
         //OnCharacterStartTurn?.Invoke();
+        InvokeOnStartCharacterTurn();
         this.gameObject.GetComponent<Highlight>().EnableHighlight();
-
     }
 
     public override void EndTurn()

@@ -4,7 +4,6 @@ using UnityEngine.EventSystems;
 
 public class TargetingState : IState
 {
-    public IAction selectedAction;
 
     public TargetingState(IAction action)
     {

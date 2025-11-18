@@ -45,6 +45,10 @@ public abstract class Character : MonoBehaviour
         sprite = this.gameObject.gameObject.GetComponent<SpriteRenderer>();
     }
 
+    public void InvokeOnStartCharacterTurn()
+    {
+        OnCharacterStartTurn?.Invoke();
+    }
     public virtual void StartTurn()
     {
         RefreshResources();

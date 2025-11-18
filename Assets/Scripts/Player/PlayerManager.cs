@@ -10,7 +10,7 @@ public class PlayerManager : MonoBehaviour
     public IState currentState;
     public PlayerCharacter playerCharacter;
     [SerializeField] public LayerMask npcLayerMask;
-
+    public List<ActionHolder> availableActions = new();
     void Awake()
     {
         instance = this;
@@ -24,6 +24,7 @@ public class PlayerManager : MonoBehaviour
         currentState.Enter();
         PlayerCharacter.animationDone += ResetState;
         PlayerCharacter.OnStartPlayerTurn += StartTurn;
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(BasicAttackAction), "basic attack"));
     }
 
     // Update is called once per frame
@@ -67,6 +68,7 @@ public class PlayerManager : MonoBehaviour
         if (finished)
         {
             playerCharacter.CharacterActed();
+            availableActions[0].SetCooldown(currentState.selectedAction.cooldown);
             currentState.Exit();
             ResetState();
         }
@@ -104,9 +106,13 @@ public class PlayerManager : MonoBehaviour
     {
         if (context.performed && currentState is not WaitingForTurnState)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new BasicAttackAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[0].TryCreateAction(out IAction action);
+            if (created)
+            {
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
