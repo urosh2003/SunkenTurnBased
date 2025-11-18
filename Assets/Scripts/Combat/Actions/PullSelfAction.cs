@@ -13,8 +13,10 @@ public class PullSelfAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = 3;
+        this.baseAPcost = 2;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
+        this.cooldown = 3;
     }
 
     public async override Task<bool> Execute()
@@ -45,22 +47,20 @@ public class PullSelfAction : IAction
         return false;
     }
 
-    private async Task<int> CalculateCooldown()
+    private async Task CalculateCooldown()
     {
-        int damage = actor.basicAttackDamage;
         if (actor is PlayerCharacter)
         {
             List<bool> results = await MinigameManager.instance.PlayMinigameTwo();
             if (results[0])
             {
-                damage += 1;
+                cooldown -= 1;
             }
-            if(results[1])
+            if (results[1])
             {
-                damage += 1;
+                cooldown -= 1;
             }
         }
-        return damage;
     }
 
     public override void RedrawTiles()

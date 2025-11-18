@@ -11,9 +11,11 @@ public class SpareChainAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = actor.basicAttackRange;
         this.duration = 1;
+        this.baseAPcost = 1;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
+        this.cooldown = 1;
     }
 
     public async override Task<bool> Execute()
@@ -34,7 +36,7 @@ public class SpareChainAction : IAction
                 {
                     await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
                 }
-                int damage = await CalculateDamage();
+                CalculateCooldown();
                 target.AddStatusEffect(new RootEffect(this.duration,target));
             }
             this.actor.ChangeAP(-this.APcost);
@@ -48,18 +50,16 @@ public class SpareChainAction : IAction
         return false;
     }
 
-    private async Task<int> CalculateDamage()
+    private async Task CalculateCooldown()
     {
-        int damage = actor.basicAttackDamage;
         if (actor is PlayerCharacter)
         {
             List<bool> results = await MinigameManager.instance.PlayMinigameOne();
             if (results[0])
             {
-                damage += 1;
+                cooldown -= 1;
             }
         }
-        return damage;
     }
 
     public override void RedrawTiles()

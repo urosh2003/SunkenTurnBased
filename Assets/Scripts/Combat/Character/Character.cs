@@ -189,4 +189,14 @@ public abstract class Character : MonoBehaviour
     {
         this.canAttack = false;
     }
+
+    internal int GetCostModifiers(IAction action)
+    {
+        int cost = 0;
+        if (HasStatusEffect(StatusEffectName.ENGINEOFF_PENALTY))
+        {
+            cost += 2;
+        }
+        return cost;
+    }
 }

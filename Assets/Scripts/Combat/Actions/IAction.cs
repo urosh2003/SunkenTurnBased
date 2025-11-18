@@ -6,6 +6,7 @@ using UnityEngine;
 public abstract class IAction
 {
     public int APcost;
+    public int baseAPcost;
 
     public Character actor;
 

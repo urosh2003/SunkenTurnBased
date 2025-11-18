@@ -10,8 +10,10 @@ public class TripleAttackAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 3;
         this.range = actor.basicAttackRange;
+        this.baseAPcost = 3;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
+        this.cooldown = 2;
     }
 
     public async override Task<bool> Execute()

@@ -15,9 +15,11 @@ public class ForceSlamAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = 1;
         this.phase = 1;
+        this.baseAPcost = 2;
+        this.cooldown = 2;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
     }
 
     public async override Task<bool> Execute()
@@ -83,7 +85,7 @@ public class ForceSlamAction : IAction
             }
             if (results[1])
             {
-                damage += 1;
+                cooldown -= 1 ;
             }
         }
         return damage;

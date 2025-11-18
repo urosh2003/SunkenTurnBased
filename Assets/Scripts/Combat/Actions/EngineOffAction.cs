@@ -10,8 +10,10 @@ public class EngineOffAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = actor.basicAttackRange;
+        this.cooldown = 2;
+        this.baseAPcost = 0;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
     }
 
     public async override Task<bool> Execute()
@@ -32,11 +34,11 @@ public class EngineOffAction : IAction
                 {
                     await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
                 }
-                int damage = await CalculateDamage();
-                target.AddStatusEffect(new EngineOffEffect(target, actor));
+                await CalculateDamage();
+                target.AddStatusEffect(new EngineOffStun(target, actor));
+                actor.AddStatusEffect(new EngineOffPenalty(actor));
             }
             this.actor.ChangeAP(-this.APcost);
-            this.actor.CharacterAttacked(new List<Character> { target });
             if (actor is PlayerCharacter)
             {
                 await CameraActionFocus.instance.MinigameDone();
@@ -46,18 +48,16 @@ public class EngineOffAction : IAction
         return false;
     }
 
-    private async Task<int> CalculateDamage()
+    private async Task CalculateDamage()
     {
-        int damage = actor.basicAttackDamage;
         if (actor is PlayerCharacter)
         {
             List<bool> results = await MinigameManager.instance.PlayMinigameOne();
             if (results[0])
             {
-                damage += 1;
+                this.cooldown -= 1;
             }
         }
-        return damage;
     }
 
     public override void RedrawTiles()

@@ -15,9 +15,11 @@ public class JumpSlamAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = 1;
         this.phase = 1;
+        this.baseAPcost = 2;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
+        this.cooldown = 3;
     }
 
     public async override Task<bool> Execute()
@@ -90,10 +92,20 @@ public class JumpSlamAction : IAction
             List<bool> results = await MinigameManager.instance.PlayMinigameThree();
             for (int i = 0; i < results.Count; i++)
             {
-                damage.Add(actor.basicAttackDamage);
-                if (results[i])
-                { 
-                    damage[i] += 1;
+                if (i != 1)
+                {
+                    damage.Add(actor.basicAttackDamage);
+                    if (results[i])
+                    {
+                        damage[i] += 1;
+                    }
+                }
+                else
+                {
+                    if (results[i])
+                    {
+                        cooldown -= 1;
+                    }
                 }
             }
         }

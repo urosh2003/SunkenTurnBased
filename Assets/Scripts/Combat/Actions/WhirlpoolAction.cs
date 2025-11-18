@@ -10,8 +10,10 @@ public class WhirlpoolAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = 1;
+        this.baseAPcost = 2;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
+        this.cooldown = 1;
     }
 
     public async override Task<bool> Execute()

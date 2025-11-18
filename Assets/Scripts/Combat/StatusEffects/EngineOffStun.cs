@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-public class EngineOffEffect : StatusEffect
+public class EngineOffStun : StatusEffect
 {
-    public EngineOffEffect(Character character, Character relatedCharacter) : base(2, character, relatedCharacter)
+    public EngineOffStun(Character character, Character relatedCharacter) : base(2, character, relatedCharacter)
     {
-        this.name = StatusEffectName.ENGINEOFF;
+        this.name = StatusEffectName.ENGINEOFF_STUN;
         this.type = StatusEffectType.DEBUFF;
     }
 

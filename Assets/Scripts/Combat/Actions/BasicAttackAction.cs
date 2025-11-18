@@ -10,9 +10,10 @@ public class BasicAttackAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 2;
         this.range = actor.basicAttackRange;
-        this.cooldown = 1;
+        this.cooldown = 0;
+        this.baseAPcost = 2;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
     }
 
     public async override Task<bool> Execute()

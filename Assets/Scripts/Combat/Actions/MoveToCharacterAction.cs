@@ -11,6 +11,7 @@ public class MoveToCharacterAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
+        this.cooldown = 0;
     }
 
     public override bool UpdateContext(ActionContext newContext)
@@ -27,12 +28,14 @@ public class MoveToCharacterAction : IAction
             path.RemoveAt(path.Count - 1);
         }
 
-        APcost = path.Count;
+        this.baseAPcost = path.Count;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
         for (int i = APcost; APcost > actor.currentAP; APcost--)
         {
             path.RemoveAt(path.Count - 1);
         }
-        APcost = path.Count;
+        this.baseAPcost = path.Count;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
 
         return true;
     }

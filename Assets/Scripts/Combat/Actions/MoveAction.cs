@@ -12,6 +12,7 @@ public class MoveAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
+        this.cooldown = 0;
     }
 
     public override bool UpdateContext(ActionContext newContext)
@@ -23,7 +24,8 @@ public class MoveAction : IAction
 
         this.context = newContext;
         path = GridEntitiesManager.instance.FindPath(actorPosition, context.targetedTile, GridEntityType.CHARACTER);
-        APcost = path.Count;
+        this.baseAPcost = path.Count;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
 
         return true;
     }

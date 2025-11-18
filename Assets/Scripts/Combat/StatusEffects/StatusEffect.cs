@@ -1,5 +1,5 @@
 
-public enum StatusEffectName { STUN, ROOT, CHAINED, DISARMED, CURSE, DOT, HOT, ENGINEOFF };
+public enum StatusEffectName { STUN, ROOT, CHAINED, DISARMED, CURSE, DOT, HOT, ENGINEOFF_STUN, ENGINEOFF_PENALTY };
 public enum StatusEffectType { BUFF, DEBUFF };
 public abstract class StatusEffect
 {

@@ -13,8 +13,10 @@ public class TorpedostormAction : IAction
     {
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
-        this.APcost = 4;
         this.range = 3;
+        this.baseAPcost = 2;
+        this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
+        this.cooldown = 2;
     }
 
     public override bool UpdateContext(ActionContext newContext)

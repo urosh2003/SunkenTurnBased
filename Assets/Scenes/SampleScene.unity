@@ -18016,6 +18016,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[1].m_Mode
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 1271407531}
@@ -18100,8 +18104,12 @@ PrefabInstance:
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[1].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[6].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: BasicAttack
+      value: Ability1
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
@@ -18109,39 +18117,39 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[8].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Hook
+      value: Ability2
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[9].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: HookSelf
+      value: Ability3
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[10].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Whirlpool
+      value: Ability4
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[11].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Sink
+      value: Ability5
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Torpedostorm
+      value: Ability6
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ThrowTorpedo
+      value: Ability7
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[14].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: ForceSlam
+      value: Ability8
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[15].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: JumpSlam
+      value: Ability9
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
-      value: Maelstorm
+      value: Ability10
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[7].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
@@ -18181,6 +18189,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: PlayerManager, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[16].m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
       value: PlayerManager, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 5067346691069610146, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}

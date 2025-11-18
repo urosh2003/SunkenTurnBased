@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     public PlayerCharacter playerCharacter;
     [SerializeField] public LayerMask npcLayerMask;
     public List<ActionHolder> availableActions = new();
+    public int currentActionIndex;
     void Awake()
     {
         instance = this;
@@ -24,7 +25,9 @@ public class PlayerManager : MonoBehaviour
         currentState.Enter();
         PlayerCharacter.animationDone += ResetState;
         PlayerCharacter.OnStartPlayerTurn += StartTurn;
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(MoveAction), "move action"));
         availableActions.Add(new ActionHolder(this.playerCharacter, typeof(BasicAttackAction), "basic attack"));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(EngineOffAction), "EngineOffAction"));
     }
 
     // Update is called once per frame
@@ -43,6 +46,7 @@ public class PlayerManager : MonoBehaviour
 
     void ResetState()
     {
+        currentActionIndex = 0;
         currentState = new TargetingState(new MoveAction(playerCharacter));
         currentState.Enter();
     }
@@ -68,7 +72,7 @@ public class PlayerManager : MonoBehaviour
         if (finished)
         {
             playerCharacter.CharacterActed();
-            availableActions[0].SetCooldown(currentState.selectedAction.cooldown);
+            availableActions[currentActionIndex].SetCooldown(currentState.selectedAction.cooldown);
             currentState.Exit();
             ResetState();
         }
@@ -102,13 +106,15 @@ public class PlayerManager : MonoBehaviour
         currentState.Enter();
     }
 
-    public void BasicAttack(InputAction.CallbackContext context)
+    public void Ability1(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 1)
         {
-            bool created = availableActions[0].TryCreateAction(out IAction action);
+            bool created = availableActions[1].TryCreateAction(out IAction action);
+
             if (created)
             {
+                currentActionIndex = 1;
                 currentState.Exit();
                 currentState = new TargetingState(action);
                 currentState.Enter();
@@ -116,112 +122,147 @@ public class PlayerManager : MonoBehaviour
         }
     }
 
-    public void Hook(InputAction.CallbackContext context)
+    public void Ability2(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 2)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new PullEnemyAction(playerCharacter)); 
-            currentState.Enter();
+            bool created = availableActions[2].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 2;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void HookSelf(InputAction.CallbackContext context)
+    public void Ability3(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 3)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new PullSelfAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[3].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 3;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void Whirlpool(InputAction.CallbackContext context)
+    public void Ability4(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 4)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new WhirlpoolAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[4].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 4;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void Sink(InputAction.CallbackContext context)
+    public void Ability5(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 5)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new TripleAttackAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[5].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 5;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void Torpedostorm(InputAction.CallbackContext context)
+    public void Ability6(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 6)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new TorpedostormAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[6].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 6;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void ThrowTorpedo(InputAction.CallbackContext context)
+    public void Ability7(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 7)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new ThrowTorpedoAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[7].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 7;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void ForceSlam(InputAction.CallbackContext context)
+    public void Ability8(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 8)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new ForceSlamAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[8].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 8;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void JumpSlam(InputAction.CallbackContext context)
+    public void Ability9(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 9)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new JumpSlamAction(playerCharacter));
-            currentState.Enter();
+            bool created = availableActions[9].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 9;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 
-    public void Maelstorm(InputAction.CallbackContext context)
+    public void Ability10(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 10)
         {
-            currentState.Exit();
-            currentState = new TargetingState(new MaelstormAction(playerCharacter));
-            currentState.Enter();
-        }
-    }
-    public void EngineOff(InputAction.CallbackContext context)
-    {
-        if (context.performed && currentState is not WaitingForTurnState)
-        {
-            currentState.Exit();
-            currentState = new TargetingState(new EngineOffAction(playerCharacter));
-            currentState.Enter();
-        }
-    }
+            bool created = availableActions[10].TryCreateAction(out IAction action);
 
-    public void SpareChain(InputAction.CallbackContext context)
-    {
-        if (context.performed && currentState is not WaitingForTurnState)
-        {
-            currentState.Exit();
-            currentState = new TargetingState(new SpareChainAction(playerCharacter));
-            currentState.Enter();
+            if (created)
+            {
+                currentActionIndex = 10;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
         }
     }
 }
