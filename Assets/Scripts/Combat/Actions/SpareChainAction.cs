@@ -36,7 +36,7 @@ public class SpareChainAction : IAction
                 {
                     await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, target.transform);
                 }
-                CalculateCooldown();
+                await CalculateCooldown();
                 target.AddStatusEffect(new RootEffect(this.duration,target));
             }
             this.actor.ChangeAP(-this.APcost);

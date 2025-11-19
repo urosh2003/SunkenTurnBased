@@ -21,7 +21,7 @@ public class ThrowTorpedoAction : IAction
         this.phase = 1;
         this.baseAPcost = 2;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
-        this.cooldown = 3;
+        this.cooldown = 2;
     }
 
     public async override Task<bool> Execute()
@@ -86,10 +86,6 @@ public class ThrowTorpedoAction : IAction
                 damage += 1;
             }
             if (results[1])
-            {
-                cooldown -= 1;
-            }
-            if (results[2])
             {
                 cooldown -= 1;
             }

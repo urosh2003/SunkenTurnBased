@@ -43,7 +43,7 @@ public class ChainMinigameThree : IMinigame
         {
             timeElapsed += Time.deltaTime;
 
-            if (timeElapsed < 0)
+            if (timeElapsed > timeTotal)
             {
                 results.Add(false);
                 EndMinigame();
@@ -67,6 +67,10 @@ public class ChainMinigameThree : IMinigame
 
     public override void EndMinigame()
     {
+        while (results.Count < 3)
+        {
+            results.Add(false);
+        }
         MinigameManager.instance.EndMinigame(results);
     }
 

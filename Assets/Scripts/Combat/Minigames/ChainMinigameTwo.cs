@@ -58,6 +58,10 @@ public class ChainMinigameTwo : IMinigame
 
     public override void EndMinigame()
     {
+        while (results.Count < 2)
+        {
+            results.Add(false);
+        }
         MinigameManager.instance.EndMinigame(results);
     }
 

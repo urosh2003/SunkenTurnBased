@@ -16,7 +16,7 @@ public class TorpedostormAction : IAction
         this.range = 3;
         this.baseAPcost = 2;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
-        this.cooldown = 2;
+        this.cooldown = 999;
     }
 
     public override bool UpdateContext(ActionContext newContext)

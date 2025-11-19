@@ -93,6 +93,10 @@ public class ChainMinigameFour : IMinigame
 
     public override void EndMinigame()
     {
+        while (results.Count < successZoneCount)
+        {
+            results.Add(false);
+        }
         MinigameManager.instance.EndMinigame(results);
     }
 

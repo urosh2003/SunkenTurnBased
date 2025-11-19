@@ -30,6 +30,10 @@ public class ChainMinigameOne : IMinigame
 
     public override void EndMinigame()
     {
+        while (results.Count < 1)
+        {
+            results.Add(false);
+        }
         MinigameManager.instance.EndMinigame(results);
     }
 

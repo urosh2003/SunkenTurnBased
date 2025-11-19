@@ -10,30 +10,41 @@ using UnityEngine;
 public class ActionHolder
 {
     public Type actionType { get; private set; }    // runtime-only (not serializable by Unity inspector)
-    public float cooldown { get; private set; }
+    public int cooldown { get; private set; }
     public string displayName { get; private set; }
     public Character actor;
+    public ActionData data;
+    ActionButton relatedButton;
 
     // ctor used from code: new ActionHolder(typeof(FireballAction), 5f, "Fireball")
-    public ActionHolder(Character actor, Type actionType, string displayName = null)
+    public ActionHolder(Character actor, Type actionType, ActionData data)
     {
         if (actionType == null) throw new ArgumentNullException(nameof(actionType));
         if (!typeof(IAction).IsAssignableFrom(actionType))
             throw new ArgumentException("actionType must derive from IAction", nameof(actionType));
 
+        this.data = data;
         this.actionType = actionType;
-        this.displayName = displayName ?? actionType.Name;
-        cooldown = 0f;
+        cooldown = 0;
         actor.OnCharacterStartTurn += DecreaseCooldown;
         this.actor=actor;
+        if(PlayerManager.instance.availableActions.Count!=0)
+        {
+            relatedButton = ActionHub.instance.AddActionButton(PlayerManager.instance.availableActions.Count, data);
+            relatedButton.CooldownUpdated(this.cooldown);
+        }
     }
 
     public void DecreaseCooldown()
     {
         cooldown -= 1;
-        if(cooldown < 0f)
+        if(cooldown < 0)
         {
-            cooldown = 0f;
+            cooldown = 0;
+        }
+        if (relatedButton != null)
+        {
+            relatedButton.CooldownUpdated(this.cooldown);
         }
     }
     public bool IsOnCooldown => cooldown > 0f;
@@ -63,5 +74,6 @@ public class ActionHolder
     public void SetCooldown(int cooldown)
     {
         this.cooldown = cooldown;
+        relatedButton.CooldownUpdated(this.cooldown);
     }
 }

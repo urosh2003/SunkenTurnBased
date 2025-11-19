@@ -382,6 +382,22 @@ public class GridEntitiesManager : MonoBehaviour
         return character;
     }
 
+    public Vector3Int GetTileInDirection(Vector3Int actorPosition, int range, int direction)
+    {
+        Vector3Int offset;
+        Vector3Int pos;
+
+        offset = actorPosition.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        pos = actorPosition;
+        for (int i = 1; i <= range; i++)
+        {
+            pos += offset;
+            offset = pos.y % 2 == 0 ? evenYNeighboursDirectionVectors[direction] : oddYNeighboursDirectionVectors[direction];
+        }
+
+        return pos;
+    }
+
     public int GetDirection(Vector3Int startPosition, int range, Vector3Int targetedTile)
     {
         Vector3Int offset;

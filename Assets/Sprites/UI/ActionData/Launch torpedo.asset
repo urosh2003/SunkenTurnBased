@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c310b3073519c5545b73152c8407c274, type: 3}
+  m_Name: Launch torpedo
+  m_EditorClassIdentifier: 
+  actionName: Launch torpedo
+  actionDescription: Launch your torpedo at an enemy, dealing 6 damage and pushing
+    them to any tile.
+  baseAPCost: 3
+  baseCooldown: 2
+  baseRange: 3
+  uiSprite: {fileID: 21300000, guid: 41ac7e27ea04ddd4a837224b4ec6faf8, type: 3}

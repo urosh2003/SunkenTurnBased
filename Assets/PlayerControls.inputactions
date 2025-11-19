@@ -297,7 +297,7 @@
                 {
                     "name": "",
                     "id": "06dc87e3-a343-4e0f-a17d-9bce1aab095e",
-                    "path": "",
+                    "path": "<Keyboard>/minus",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -308,7 +308,7 @@
                 {
                     "name": "",
                     "id": "5f79fbb1-0e0a-4fe8-a777-641f4b48f3a6",
-                    "path": "",
+                    "path": "<Keyboard>/equals",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -11,7 +12,9 @@ public class PlayerManager : MonoBehaviour
     public PlayerCharacter playerCharacter;
     [SerializeField] public LayerMask npcLayerMask;
     public List<ActionHolder> availableActions = new();
+    public List<ActionData> allActionsData = new();
     public int currentActionIndex;
+
     void Awake()
     {
         instance = this;
@@ -25,9 +28,20 @@ public class PlayerManager : MonoBehaviour
         currentState.Enter();
         PlayerCharacter.animationDone += ResetState;
         PlayerCharacter.OnStartPlayerTurn += StartTurn;
-        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(MoveAction), "move action"));
-        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(BasicAttackAction), "basic attack"));
-        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(EngineOffAction), "EngineOffAction"));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(MoveAction), new ActionData()));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(BasicAttackAction), allActionsData[0]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(PullEnemyAction), allActionsData[1]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(PullSelfAction), allActionsData[2]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(WhirlpoolAction), allActionsData[3]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(TorpedostormAction), allActionsData[4]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(MaelstormAction), allActionsData[5]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(ThrowTorpedoAction), allActionsData[6]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(SpareChainAction), allActionsData[7]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(ForceSlamAction), allActionsData[8]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(TripleAttackAction), allActionsData[9]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(ChargeAction), allActionsData[10]));
+        availableActions.Add(new ActionHolder(this.playerCharacter, typeof(EngineOffAction), allActionsData[11]));
+
     }
 
     // Update is called once per frame
@@ -259,6 +273,53 @@ public class PlayerManager : MonoBehaviour
             if (created)
             {
                 currentActionIndex = 10;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
+        }
+    }
+
+    public void Ability11(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 11)
+        {
+            bool created = availableActions[11].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 11;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
+        }
+    }
+
+    public void Ability12(InputAction.CallbackContext context)
+    {
+        if (context.performed && currentState is not WaitingForTurnState && availableActions.Count > 12)
+        {
+            bool created = availableActions[12].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = 12;
+                currentState.Exit();
+                currentState = new TargetingState(action);
+                currentState.Enter();
+            }
+        }
+    }
+    public void useAbility(int number)
+    {
+        if (currentState is not WaitingForTurnState && availableActions.Count > number)
+        {
+            bool created = availableActions[number].TryCreateAction(out IAction action);
+
+            if (created)
+            {
+                currentActionIndex = number;
                 currentState.Exit();
                 currentState = new TargetingState(action);
                 currentState.Enter();

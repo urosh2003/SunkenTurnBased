@@ -15,7 +15,7 @@ public class MaelstormAction : IAction
         this.range = 2;
         this.baseAPcost = 2;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
-        this.cooldown = 1;
+        this.cooldown = 2;
     }
 
     public override bool UpdateContext(ActionContext newContext)

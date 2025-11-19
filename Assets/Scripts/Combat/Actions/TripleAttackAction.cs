@@ -13,7 +13,7 @@ public class TripleAttackAction : IAction
         this.range = actor.basicAttackRange;
         this.baseAPcost = 3;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
-        this.cooldown = 2;
+        this.cooldown = 999;
     }
 
     public async override Task<bool> Execute()

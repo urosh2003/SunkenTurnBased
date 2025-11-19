@@ -16,6 +16,8 @@ public abstract class IAction
     public bool resolving = false;
     public int cooldown;
 
+    public ActionData actionData;
+
     public abstract Task<bool> Execute();
 
     public virtual bool UpdateContext(ActionContext newContext)
