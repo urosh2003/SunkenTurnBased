@@ -11,12 +11,12 @@ public class EngineOffPenalty : StatusEffect
 
     public override void Initialize()
     {
-        owner.OnCharacterAct += DecreaseDuration;
+        owner.OnCharacterActed += (action) => DecreaseDuration();
     }
 
     public override void OnRemove()
     {
-        owner.OnCharacterStartTurn -= DecreaseDuration;
+        owner.OnCharacterActed -= (action) => DecreaseDuration();
     }
 
 }

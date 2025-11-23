@@ -12,13 +12,13 @@ public class EngineOffStun : StatusEffect
     public override void Initialize()
     {
         owner.OnCharacterStartTurn += owner.CantAct;
-        relatedCharacter.OnCharacterAct += DecreaseDuration;
+        relatedCharacter.OnCharacterActed += (action) => DecreaseDuration();
     }
 
     public override void OnRemove()
     {
         owner.OnCharacterStartTurn -= owner.CantAct;
-        relatedCharacter.OnCharacterAct -= DecreaseDuration;
+        relatedCharacter.OnCharacterActed -= (action) => DecreaseDuration();
     }
 
     void CharacterAttacked(List<Character> targets)

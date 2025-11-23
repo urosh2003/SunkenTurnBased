@@ -45,6 +45,7 @@ public class TargetingState : IState
 
     public override void Enter()
     {
+        PlayerManager.instance.playerCharacter.CharacterActionInitiated(selectedAction);
         SelectedTilesManager.instance.ClearRangeTiles();
         SelectedTilesManager.instance.ClearTargetingTiles();
         selectedAction.DrawTiles();

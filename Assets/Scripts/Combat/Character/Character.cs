@@ -34,7 +34,11 @@ public abstract class Character : MonoBehaviour
     public event Action OnCharacterEndTurn;
     public event Action OnCharacterMove;
     public event Action<List<Character>> OnCharacterAttack;
-    public event Action OnCharacterAct;
+    public event Action<IAction> OnCharacterActed;
+    public event Action<IAction> OnCharacterActionInitiated;
+
+    public List<Perk> activePerks = new();
+
 
     public bool canMove = true;
     public bool canAct = true;
@@ -71,9 +75,13 @@ public abstract class Character : MonoBehaviour
         OnCharacterAttack?.Invoke(targets);
     }
 
-    public virtual void CharacterActed()
+    public virtual void CharacterActed(IAction action)
     {
-        OnCharacterAct?.Invoke();
+        OnCharacterActed?.Invoke(action);
+    }
+    public virtual void CharacterActionInitiated(IAction action)
+    {
+        OnCharacterActionInitiated?.Invoke(action);
     }
 
     public virtual void RefreshResources()

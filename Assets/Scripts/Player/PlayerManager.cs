@@ -42,6 +42,7 @@ public class PlayerManager : MonoBehaviour
         availableActions.Add(new ActionHolder(this.playerCharacter, typeof(ChargeAction), allActionsData[10]));
         availableActions.Add(new ActionHolder(this.playerCharacter, typeof(EngineOffAction), allActionsData[11]));
 
+        this.playerCharacter.activePerks.Add(new PullPerk(this.playerCharacter));
     }
 
     // Update is called once per frame
@@ -85,7 +86,7 @@ public class PlayerManager : MonoBehaviour
         bool finished = await currentState.Execute();
         if (finished)
         {
-            playerCharacter.CharacterActed();
+            playerCharacter.CharacterActed(currentState.selectedAction);
             availableActions[currentActionIndex].SetCooldown(currentState.selectedAction.cooldown);
             currentState.Exit();
             ResetState();
