@@ -34,6 +34,7 @@ public abstract class Character : MonoBehaviour
     public event Action OnCharacterEndTurn;
     public event Action OnCharacterMove;
     public event Action<List<Character>> OnCharacterAttack;
+    public event Action<Character, Vector3> OnCharacterMovedSomeone;
     public event Action<IAction> OnCharacterActed;
     public event Action<IAction> OnCharacterActionInitiated;
 
@@ -67,12 +68,21 @@ public abstract class Character : MonoBehaviour
     }
 
     public virtual void MoveCharacter(Vector3 target, bool wholeAction = false) {
-        OnCharacterMove?.Invoke();     
+    }
+
+    public virtual void CharacterMoved(Vector3 target, bool wholeAction = false)
+    {
+        OnCharacterMove.Invoke();
     }
 
     public virtual void CharacterAttacked(List<Character> targets)
     {
         OnCharacterAttack?.Invoke(targets);
+    }
+
+    public virtual void CharacterMovedSomeone(Character target, Vector3 newCharacterPosition)
+    {
+        OnCharacterMovedSomeone?.Invoke(target, newCharacterPosition);
     }
 
     public virtual void CharacterActed(IAction action)

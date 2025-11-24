@@ -46,7 +46,7 @@ public class ChargeAction : IAction
             {
                 await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, GridEntitiesManager.instance.GetCellCenter(targetTile));
             }
-            await CalculateCooldown();
+            int damage = await CalculateCooldown();
             bool done = false;
             for (int i = 0; i < this.range; i++)
             {
@@ -57,6 +57,8 @@ public class ChargeAction : IAction
                 {
                     Vector3 newTargetPosition = GridEntitiesManager.instance.MoveCharacterInDirection(nextTile, direction);
                     target.MoveCharacter(newTargetPosition, false);
+                    actor.CharacterMovedSomeone(target, newTargetPosition);
+                    target.TakeDamage(damage);
                     done = true;
                 }
 
@@ -79,20 +81,22 @@ public class ChargeAction : IAction
         return false;
     }
 
-    private async Task CalculateCooldown()
+    private async Task<int> CalculateCooldown()
     {
+        int damage = actor.basicAttackDamage;
         if (actor is PlayerCharacter)
         {
             List<bool> results = await MinigameManager.instance.PlayMinigameTwo();
             if (results[0])
             {
-                cooldown -= 1;
+                damage += 1;
             }
             if (results[1])
             {
                 cooldown -= 1;
             }
         }
+        return damage + bonusDamage;
     }
 
     public override void RedrawTiles()

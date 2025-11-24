@@ -12,6 +12,8 @@ public abstract class IAction
 
     public ActionContext context;
 
+    public int bonusDamage = 0;
+
     public int range;
     public bool resolving = false;
     public int cooldown;

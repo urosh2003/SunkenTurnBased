@@ -62,8 +62,10 @@ public class ThrowTorpedoAction : IAction
             {
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);
+                actor.CharacterMovedSomeone(target, newTargetPosition);
+
             }
-            
+
             this.actor.ChangeAP(-this.APcost);
             this.actor.CharacterAttacked(new List<Character> { target });
             if (actor is PlayerCharacter)
@@ -90,7 +92,7 @@ public class ThrowTorpedoAction : IAction
                 cooldown -= 1;
             }
         }
-        return damage;
+        return damage + bonusDamage;
     }
 
     public override void RedrawTiles()

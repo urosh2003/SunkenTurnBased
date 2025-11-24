@@ -80,7 +80,11 @@ public class MaelstormAction : IAction
                     {
                         Vector3Int newTile = GridEntitiesManager.instance.TryMoveCharacter(c, steps);
                         if (newTile != Vector3Int.back)
+                        {
                             c.MoveCharacter(GridEntitiesManager.instance.GetCellCenter(newTile));
+                            actor.CharacterMovedSomeone(c, GridEntitiesManager.instance.GetCellCenter(newTile));
+
+                        }
                     }
                 }
 
@@ -115,7 +119,7 @@ public class MaelstormAction : IAction
             List<bool> results = await MinigameManager.instance.PlayMinigameFour(targets.Count);
             for (int i = 0; i < targets.Count; i++)
             {
-                damage.Add(1);
+                damage.Add(1 + bonusDamage);
 
                 if (results[i])
                     damage[i] += 1;

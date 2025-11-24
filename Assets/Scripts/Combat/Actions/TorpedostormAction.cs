@@ -99,7 +99,7 @@ public class TorpedostormAction : IAction
             List<bool> results = await MinigameManager.instance.PlayMinigameFour(targets.Count);
             for (int i = 0; i < targets.Count; i++)
             {
-                damage.Add(1);
+                damage.Add(1 + bonusDamage);
 
                 if (results[i])
                     damage[i] += 1;

@@ -59,8 +59,10 @@ public class ForceSlamAction : IAction
             {
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);
+                actor.CharacterMovedSomeone(target, newTargetPosition);
+
             }
-           
+
             this.actor.ChangeAP(-this.APcost);
             this.actor.CharacterAttacked(new List<Character> { target });
 
@@ -88,7 +90,7 @@ public class ForceSlamAction : IAction
                 cooldown -= 1 ;
             }
         }
-        return damage;
+        return damage + bonusDamage;
     }
 
     public override void RedrawTiles()

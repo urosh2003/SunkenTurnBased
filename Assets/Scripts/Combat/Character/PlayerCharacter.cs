@@ -59,6 +59,7 @@ public class PlayerCharacter : Character
         }
 
         transform.position = target; // Ensure exact position
+        CharacterMoved(target, wholeAction);
         if (wholeAction)
         {
             PlayerCharacter.animationDone?.Invoke();

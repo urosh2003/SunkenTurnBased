@@ -58,7 +58,7 @@ public class BasicAttackAction : IAction
                 damage += 1;
             }
         }
-        return damage;
+        return damage + bonusDamage;
     }
 
     public override void RedrawTiles()

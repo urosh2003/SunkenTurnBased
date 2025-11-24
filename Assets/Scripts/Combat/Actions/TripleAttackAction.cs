@@ -61,7 +61,7 @@ public class TripleAttackAction : IAction
             List<bool> results = await MinigameManager.instance.PlayMinigameThree();
             for (int i = 0; i < results.Count; i++)
             {
-                damage.Add(actor.basicAttackDamage);
+                damage.Add(actor.basicAttackDamage + bonusDamage);
                 if(results[i])
                 {
                     damage[i] += 1;

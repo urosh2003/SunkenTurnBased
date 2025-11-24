@@ -59,6 +59,8 @@ public class JumpSlamAction : IAction
             {
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);
+                actor.CharacterMovedSomeone(target, newTargetPosition);
+
                 await Task.Delay(200);
             }
            
@@ -94,7 +96,7 @@ public class JumpSlamAction : IAction
             {
                 if (i != 1)
                 {
-                    damage.Add(actor.basicAttackDamage);
+                    damage.Add(actor.basicAttackDamage + bonusDamage);
                     if (results[i])
                     {
                         damage[i] += 1;
