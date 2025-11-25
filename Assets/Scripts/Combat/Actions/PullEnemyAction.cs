@@ -52,8 +52,13 @@ public class PullEnemyAction : IAction
                 if(target)
                 {
                     Vector3 newCharacterPosition = GridEntitiesManager.instance.HookCharacter(actorPosition, range, direction);
-                    target.MoveCharacter(newCharacterPosition, false);
-                    actor.CharacterMovedSomeone(target, newCharacterPosition);
+                    if(newCharacterPosition != target.transform.position)
+                    {
+                        int distanceHooked = (int)GridEntitiesManager.instance.DistanceToTileWorld(newCharacterPosition, target.transform.position);
+                        target.MoveCharacter(newCharacterPosition, false, distanceHooked);
+                        actor.CharacterMovedSomeone(target, newCharacterPosition);
+                    }
+
 
                 }
                 if (actor is PlayerCharacter)

@@ -55,12 +55,16 @@ public class ForceSlamAction : IAction
             }
             int damage = await CalculateCooldown();
             target.TakeDamage(damage);
-            if(target)
+            if(target && target.currentHealth > 0)
             {
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);
                 actor.CharacterMovedSomeone(target, newTargetPosition);
 
+            }
+            else
+            {
+                actor.CharacterKilledEnemy();
             }
 
             this.actor.ChangeAP(-this.APcost);

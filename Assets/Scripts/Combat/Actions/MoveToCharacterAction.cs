@@ -42,7 +42,7 @@ public class MoveToCharacterAction : IAction
 
     public override async Task<bool> Execute()
     {
-        if (actor.currentAP >= APcost && APcost != 0)
+        if (actor.currentAP >= APcost)
         {
             Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, path[path.Count - 1], GridEntityType.CHARACTER);
 
@@ -51,7 +51,7 @@ public class MoveToCharacterAction : IAction
             else
                 this.actor.ChangeAP(-APcost);
 
-            this.actor.MoveCharacter(newCharacterPosition, true);
+            this.actor.MoveCharacter(newCharacterPosition, true, path.Count);
             return true;
         }
         return false;

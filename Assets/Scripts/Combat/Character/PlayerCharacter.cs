@@ -39,12 +39,12 @@ public class PlayerCharacter : Character
     public AnimationCurve easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Default ease
     public static event Action animationDone;
 
-    public override void MoveCharacter(Vector3 targetPosition, bool wholeAction)
+    public override void MoveCharacter(Vector3 targetPosition, bool wholeAction, int tilesMoved)
     {
-        StartCoroutine(MoveCoroutine(targetPosition, moveDuration, wholeAction));
+        StartCoroutine(MoveCoroutine(targetPosition, moveDuration, wholeAction, tilesMoved));
     }
 
-    private IEnumerator MoveCoroutine(Vector3 target, float duration, bool wholeAction)
+    private IEnumerator MoveCoroutine(Vector3 target, float duration, bool wholeAction, int tilesMoved)
     {
         Vector3 startPos = transform.position;
         float elapsed = 0f;
@@ -59,7 +59,7 @@ public class PlayerCharacter : Character
         }
 
         transform.position = target; // Ensure exact position
-        CharacterMoved(target, wholeAction);
+        CharacterMoved(tilesMoved);
         if (wholeAction)
         {
             PlayerCharacter.animationDone?.Invoke();

@@ -59,6 +59,10 @@ public class ChargeAction : IAction
                     target.MoveCharacter(newTargetPosition, false);
                     actor.CharacterMovedSomeone(target, newTargetPosition);
                     target.TakeDamage(damage);
+                    if(target == null || target.currentHealth <= 0)
+                    {
+                        actor.CharacterKilledEnemy();
+                    }
                     done = true;
                 }
 

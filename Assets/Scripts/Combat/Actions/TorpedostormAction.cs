@@ -65,6 +65,10 @@ public class TorpedostormAction : IAction
                         for (int j = 0; j < targets.Count; j++)
                         {
                             targets[j].TakeDamage(damage[j]);
+                            if (targets[j] == null || targets[j].currentHealth <= 0)
+                            {
+                                actor.CharacterKilledEnemy();
+                            }
                         }
                     }
                     if (currentStep < distance)

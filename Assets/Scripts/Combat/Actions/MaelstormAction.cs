@@ -13,7 +13,7 @@ public class MaelstormAction : IAction
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
         this.range = 2;
-        this.baseAPcost = 2;
+        this.baseAPcost = 3;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
         this.cooldown = 2;
     }
@@ -57,9 +57,10 @@ public class MaelstormAction : IAction
                 await Task.Delay(200);
                 for (int i = targets.Count-1; i >= 0; i--)
                 {
-                    if (targets[i] == null)
+                    if (targets[i] == null || targets[i].currentHealth <= 0)
                     {
                         targets.RemoveAt(i);
+                        actor.CharacterKilledEnemy();
                     }
                 }
 

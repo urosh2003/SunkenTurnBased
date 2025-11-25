@@ -42,7 +42,7 @@ public class MoveAction : IAction
             else
                 this.actor.ChangeAP(-APcost);
 
-            this.actor.MoveCharacter(newCharacterPosition, true);
+            this.actor.MoveCharacter(newCharacterPosition, true, path.Count);
             return true;
         }
         return false;

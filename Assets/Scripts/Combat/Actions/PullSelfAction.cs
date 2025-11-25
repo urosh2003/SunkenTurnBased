@@ -41,7 +41,8 @@ public class PullSelfAction : IAction
             }
             this.actor.ChangeAP(-this.APcost);
             Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, context.targetedTile, GridEntityType.CHARACTER);
-            this.actor.MoveCharacter(newCharacterPosition, true);
+            int distanceHooked = (int)GridEntitiesManager.instance.DistanceToTileWorld(newCharacterPosition, actor.transform.position);
+            this.actor.MoveCharacter(newCharacterPosition, true, distanceHooked);
             return true;
         }
         return false;

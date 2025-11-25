@@ -21,7 +21,7 @@ public class BasicAttackAction : IAction
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range
             && this.actor.currentAP >= this.APcost &&
-            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor && 
+            GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile) != actor &&
             !resolving
             )
         {
@@ -35,6 +35,10 @@ public class BasicAttackAction : IAction
                 }
                 int damage = await CalculateDamage();
                 target.TakeDamage(damage);
+                if (target == null || target.currentHealth <= 0)
+                {
+                    actor.CharacterKilledEnemy();
+                }
             }
             this.actor.ChangeAP(-this.APcost);
             this.actor.CharacterAttacked(new List<Character> { target });

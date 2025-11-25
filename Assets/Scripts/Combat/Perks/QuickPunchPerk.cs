@@ -53,5 +53,6 @@ public class QuickPunchPerk : Perk
     {
         owner.OnCharacterMovedSomeone -= CheckForDiscountUpdate;
         owner.OnCharacterActionInitiated -= CheckForDiscount;
+        owner.OnCharacterActed -= CheckForResetBuff;
     }
 }

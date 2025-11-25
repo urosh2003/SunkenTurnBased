@@ -35,7 +35,7 @@ public class SuperchargedPerk : Perk
         }
     }
 
-    private void RefreshSupercharge()
+    private void RefreshSupercharge(int tilesMoved)
     {
         bonusReady = true;
         resetBuff = false;

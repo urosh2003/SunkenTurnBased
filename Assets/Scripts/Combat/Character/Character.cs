@@ -32,7 +32,8 @@ public abstract class Character : MonoBehaviour
     public List<StatusEffect> activeEffects = new();
     public event Action OnCharacterStartTurn;
     public event Action OnCharacterEndTurn;
-    public event Action OnCharacterMove;
+    public event Action OnCharacterKilledEnemy;
+    public event Action<int> OnCharacterMove;
     public event Action<List<Character>> OnCharacterAttack;
     public event Action<Character, Vector3> OnCharacterMovedSomeone;
     public event Action<IAction> OnCharacterActed;
@@ -67,12 +68,17 @@ public abstract class Character : MonoBehaviour
         OnEndTurn?.Invoke();
     }
 
-    public virtual void MoveCharacter(Vector3 target, bool wholeAction = false) {
+    public virtual void MoveCharacter(Vector3 target, bool wholeAction = false, int tilesMoved=1) {
     }
 
-    public virtual void CharacterMoved(Vector3 target, bool wholeAction = false)
+    public virtual void CharacterMoved(int tilesMoved)
     {
-        OnCharacterMove.Invoke();
+        OnCharacterMove?.Invoke(tilesMoved);
+    }
+
+    public virtual void CharacterKilledEnemy()
+    {
+        OnCharacterKilledEnemy?.Invoke();
     }
 
     public virtual void CharacterAttacked(List<Character> targets)

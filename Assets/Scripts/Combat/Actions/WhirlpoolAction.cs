@@ -37,6 +37,11 @@ public class WhirlpoolAction : IAction
                 for (int i = 0; i < targets.Count; i++)
                 {
                     targets[i].TakeDamage(damage[i]);
+                    if (targets[i] == null || targets[i].currentHealth <= 0)
+                    {
+                        actor.CharacterKilledEnemy();
+
+                    }
                 }
                 if (actor is PlayerCharacter)
                 {

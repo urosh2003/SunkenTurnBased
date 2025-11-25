@@ -45,6 +45,7 @@ public class PullPerk : Perk
 
     public override void OnRemove()
     {
-        throw new System.NotImplementedException();
+        owner.OnCharacterActed -= CheckForDiscountUpdate;
+        owner.OnCharacterActionInitiated -= CheckForDiscount;
     }
 }

@@ -40,13 +40,13 @@ public class NpcAI : MonoBehaviour
     public float moveDuration = 0.3f; // Time to reach target
     public AnimationCurve easeCurve = AnimationCurve.EaseInOut(0, 0, 1, 1); // Default ease
 
-    public void MoveNpc(Vector3 targetPosition, bool wholeAction)
+    public void MoveNpc(Vector3 targetPosition, bool wholeAction, int tilesMoved)
     {
         moving = true;
-        StartCoroutine(MoveCoroutine(targetPosition, moveDuration, wholeAction));
+        StartCoroutine(MoveCoroutine(targetPosition, moveDuration, wholeAction, tilesMoved));
     }
 
-    private IEnumerator MoveCoroutine(Vector3 target, float duration, bool wholeAction)
+    private IEnumerator MoveCoroutine(Vector3 target, float duration, bool wholeAction, int tilesMoved)
     {
         Vector3 startPos = transform.position;
         float elapsed = 0f;
@@ -61,7 +61,7 @@ public class NpcAI : MonoBehaviour
         }
 
         transform.position = target; // Ensure exact position
-
+        this.gameObject.GetComponent<Character>().CharacterMoved(tilesMoved);
         if (wholeAction)
         {
             ThinkAndAct();

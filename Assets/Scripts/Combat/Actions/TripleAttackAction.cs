@@ -41,6 +41,11 @@ public class TripleAttackAction : IAction
                         target.TakeDamage(damage[i]);
                         this.actor.CharacterAttacked(new List<Character> { target });
                     }
+                    if(target == null || target.currentHealth <= 0)
+                    {
+                        actor.CharacterKilledEnemy();
+                        break;
+                    }
                 }
             }
             this.actor.ChangeAP(-this.APcost);
