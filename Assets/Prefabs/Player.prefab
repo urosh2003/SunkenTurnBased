@@ -13,8 +13,8 @@ GameObject:
   - component: {fileID: 5067346691069610146}
   - component: {fileID: 3906635664628196896}
   - component: {fileID: 120670963448388757}
-  - component: {fileID: 1760980760808939428}
   - component: {fileID: -6808351502452429084}
+  - component: {fileID: 3431010339565200004}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -179,6 +179,62 @@ MonoBehaviour:
         m_CallState: 2
     m_ActionId: f34d7362-bceb-4281-b366-eae59ecf5c0f
     m_ActionName: Player/Ability1[/Keyboard/1]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 81ed5a8a-b0ef-4aa7-b8f6-358f28433ed9
+    m_ActionName: Player/HitMinigame[/Keyboard/space]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: bff29d5d-3520-45cd-8d5a-ea58d975d1f5
+    m_ActionName: Player/Ability2[/Keyboard/2]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 04321981-a9d8-4cfd-98e8-90ab0a1a377a
+    m_ActionName: Player/Ability3[/Keyboard/3]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 92ff16ca-44ac-4940-8ee9-1ea1a6ecb33c
+    m_ActionName: Player/Ability4[/Keyboard/4]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d76589e1-7472-4080-adf9-84eab754a238
+    m_ActionName: Player/Ability5[/Keyboard/5]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d4c80b85-787e-4655-9758-01f70e9a05da
+    m_ActionName: Player/Ability6[/Keyboard/6]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a9300905-cd16-4634-80c0-1bf3f25fdc87
+    m_ActionName: Player/Ability7[/Keyboard/7]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b185876c-88a7-4d00-aaa0-5006d0d93a3e
+    m_ActionName: Player/Ability8[/Keyboard/8]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 417d2700-acfc-42f4-bdf5-7f541b8c71e4
+    m_ActionName: Player/Ability9[/Keyboard/9]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d036c21a-2629-49f1-a6c2-b9042acd0cb1
+    m_ActionName: Player/Ability10[/Keyboard/0]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c090a4b4-4565-49cf-a0ae-2452f70bd8d6
+    m_ActionName: Player/Ability11[/Keyboard/minus]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: e46cec7e-e22f-4578-a32d-95714cb08e6b
+    m_ActionName: Player/Ability12[/Keyboard/equals]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: b49fc3c4-1435-4143-ab07-7846dc69b173
+    m_ActionName: Player/Ability13
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d5a6ac1b-e436-4b37-9a35-ad6afe4c3363
+    m_ActionName: Player/TurnOnHighlights[/Keyboard/tab,/Keyboard/alt]
   m_NeverAutoSwitchControlSchemes: 0
   m_DefaultControlScheme: 
   m_DefaultActionMap: Player
@@ -225,6 +281,10 @@ MonoBehaviour:
   sprite: {fileID: 4614107132228499799}
   basicAttackDamage: 1
   basicAttackRange: 1
+  canMove: 1
+  canAct: 1
+  canAttack: 1
+  removeDelay: 0.5
   moveDuration: 0.3
   easeCurve:
     serializedVersion: 2
@@ -250,18 +310,6 @@ MonoBehaviour:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &1760980760808939428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2078371593458610020}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3c1b9c9384493ec42b56d2f42c93f316, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &-6808351502452429084
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -278,6 +326,24 @@ MonoBehaviour:
   npcLayerMask:
     serializedVersion: 2
     m_Bits: 64
+  availableActions: []
+  allActionsData: []
+  currentActionIndex: 0
+--- !u!114 &3431010339565200004
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2078371593458610020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89cda1f24a8d59a40a2b3c0ac54d35e1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthbarUI: {fileID: 0}
+  locked: 0
+  allOn: 0
 --- !u!1 &7220460222946536822
 GameObject:
   m_ObjectHideFlags: 0

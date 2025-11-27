@@ -49,6 +49,8 @@ public class ForceSlamAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             if (actor is PlayerCharacter)
             {
                 await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, GridEntitiesManager.instance.GetCellCenter(context.targetedTile));
@@ -102,12 +104,12 @@ public class ForceSlamAction : IAction
         if (this.context.targetedTile != null &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && !resolving && this.phase == 1)
         {
-            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (this.phase == 2 &&
             GridEntitiesManager.instance.DistanceToTile(targetPosition, this.context.targetedTile) <= 1)
         {
-            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving && this.phase == 2)
         {
@@ -123,14 +125,12 @@ public class ForceSlamAction : IAction
     {
         if (phase == 1)
         {
-            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
-            SelectedTilesManager.instance.DrawSingle(actorPosition, new TileStyle(TileColor.GREEN, TileType.DEFAULT, TileLayer.RANGE));
-
+            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
         }
         else 
         {
-            SelectedTilesManager.instance.DrawCircle(targetPosition, 1, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
-            SelectedTilesManager.instance.DrawSingle(targetPosition, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.RANGE));
+            SelectedTilesManager.instance.DrawCircle(targetPosition, 1, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+            SelectedTilesManager.instance.DrawSingle(targetPosition, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.RANGE));
         }
     }
 }

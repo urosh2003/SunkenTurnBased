@@ -41,6 +41,8 @@ public class MaelstormAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             List<Character> targets = GridEntitiesManager.instance.GetCharactersInRange(actorPosition, this.range);
             if (targets.Count != 0)
             {
@@ -137,7 +139,7 @@ public class MaelstormAction : IAction
             !resolving
             )
         {
-            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -147,6 +149,6 @@ public class MaelstormAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

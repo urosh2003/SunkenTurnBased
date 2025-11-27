@@ -11,6 +11,7 @@ public abstract class Character : MonoBehaviour
     public int currentHealth;
 
     public int currentAP;
+    public int APPerTurn;
     public int maxAP;
 
 
@@ -33,11 +34,16 @@ public abstract class Character : MonoBehaviour
     public event Action OnCharacterStartTurn;
     public event Action OnCharacterEndTurn;
     public event Action OnCharacterKilledEnemy;
-    public event Action<int> OnCharacterMove;
+    public event Action<int> OnCharacterMove; // How many tiles moved
     public event Action<List<Character>> OnCharacterAttack;
     public event Action<Character, Vector3> OnCharacterMovedSomeone;
     public event Action<IAction> OnCharacterActed;
     public event Action<IAction> OnCharacterActionInitiated;
+
+    public event Action<int, int> OnHealthChanged; //Current health, max health
+    public event Action<int, int> OnAPChanged; //Current ap, max ap
+    public event Action OnStatusChanged;
+
 
     public List<Perk> activePerks = new();
 
@@ -103,7 +109,12 @@ public abstract class Character : MonoBehaviour
     public virtual void RefreshResources()
     {
         this.currentFreeMovement = this.maxFreeMovement;
-        this.currentAP += this.maxAP;
+        this.currentAP += this.APPerTurn;
+        if(currentAP > maxAP)
+        {
+            currentAP = maxAP;
+        }
+        OnAPChanged?.Invoke(currentAP, maxAP);
         this.canMove = true;
         this.canAttack = true;
         this.canAct = true;
@@ -112,24 +123,41 @@ public abstract class Character : MonoBehaviour
     public virtual void ChangeAP(int value)
     {
         this.currentAP += value;
+        OnAPChanged?.Invoke(currentAP, maxAP);
     }
 
     public virtual void TakeDamage(int value)
     {
-        this.currentHealth -= value;
-        StartCoroutine(TurnRed());
+        OnHealthChanged?.Invoke(currentHealth - value, maxHealth);
+        StartCoroutine(TakeDamageCoroutine(value));
     }
 
-    private float redTime = 0.2f;
+    private float redTime = 0.5f;
 
-    private IEnumerator TurnRed()
+    private IEnumerator TakeDamageCoroutine(int value)
     {
         this.sprite.color = Color.red;
 
-        yield return new WaitForSeconds(redTime);
+        yield return new WaitForSecondsRealtime(redTime);
 
+        this.currentHealth -= value;
+
+        if (currentHealth <= 0)
+        {
+            StartCoroutine(RemoveCharacter());
+        }
         this.sprite.color = Color.white;
     }
+    public IEnumerator RemoveCharacter()
+    {
+        yield return new WaitForSeconds(removeDelay);
+
+        GridEntitiesManager.instance.RemoveGridEntityWorld(this.transform.position, GridEntityType.CHARACTER);
+        TurnManager.instance.RemoveCharacter(this.gameObject);
+        Destroy(this.gameObject);
+    }
+
+    public float removeDelay = 0.5f;
 
     public override bool Equals(object other)
     {

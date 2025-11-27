@@ -14,7 +14,7 @@ public class TorpedostormAction : IAction
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
         this.range = 3;
-        this.baseAPcost = 2;
+        this.baseAPcost = 4;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
         this.cooldown = 999;
     }
@@ -48,6 +48,8 @@ public class TorpedostormAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             if (actor is PlayerCharacter)
             {
                 await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, GridEntitiesManager.instance.GetCellCenter(context.targetedTile));
@@ -90,6 +92,7 @@ public class TorpedostormAction : IAction
             {
                 await CameraActionFocus.instance.MinigameDone();
             }
+            resolving = false;  
             return true;
         }
         return false;

@@ -86,10 +86,12 @@ public class GridEntitiesManager : MonoBehaviour
             gameObjects = new Dictionary<GridEntityType, GameObject>();
             gameObjects.Add(gridEntityType, gameObject);
             gridEntities.Add(tilePosition, gameObjects);
+            SelectedTilesManager.instance.DrawEntityTile(tilePosition, gameObject, gridEntityType);
         }
         else if (!gameObjects.ContainsKey(gridEntityType))
         {
             gameObjects.Add(gridEntityType, gameObject);
+            SelectedTilesManager.instance.DrawEntityTile(tilePosition, gameObject, gridEntityType);
         }
     }
 
@@ -109,6 +111,7 @@ public class GridEntitiesManager : MonoBehaviour
         if (gameObjects != null)
         {
             gameObjects.Remove(gridEntityType);
+            SelectedTilesManager.instance.RemoveEntityTile(tilePosition);
         }
     }
 
@@ -160,6 +163,7 @@ public class GridEntitiesManager : MonoBehaviour
             if(!gameObjects.Any())
             {
                 gridEntities.Remove(originalTilePosition);
+                SelectedTilesManager.instance.RemoveEntityTile(originalTilePosition);
             }
             AddGridEntity(newTilePosition, gameObject, gridEntityType);
 
@@ -540,12 +544,7 @@ public class GridEntitiesManager : MonoBehaviour
                 if (GetCharacterAtTile(destination))
                     continue;
 
-                // Remove from old tile
-                gridEntities[oldPos].Remove(GridEntityType.CHARACTER);
-
-                // Add to new tile
-                if (!gridEntities.ContainsKey(destination))
-                    gridEntities[destination] = new Dictionary<GridEntityType, GameObject>();
+                MoveEntityToTilePosition(oldPos, destination, GridEntityType.CHARACTER);
 
                 gridEntities[destination][GridEntityType.CHARACTER] = character.gameObject;
                 return destination;

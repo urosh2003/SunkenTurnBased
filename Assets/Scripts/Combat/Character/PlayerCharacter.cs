@@ -16,14 +16,14 @@ public class PlayerCharacter : Character
         OnStartPlayerTurn?.Invoke();
         //OnCharacterStartTurn?.Invoke();
         InvokeOnStartCharacterTurn();
-        this.gameObject.GetComponent<Highlight>().EnableHighlight();
+        this.gameObject.GetComponent<CharacterDetails>().EnableHighlight();
     }
 
     public override void EndTurn()
     {
         if (TurnManager.instance.currentTurn == this)
         {
-            this.gameObject.GetComponent<Highlight>().DisableHighlight();
+            this.gameObject.GetComponent<CharacterDetails>().DisableHighlight();
             //OnCharacterEndTurn?.Invoke();
             OnEndPlayerTurn?.Invoke();
         }

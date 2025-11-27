@@ -20,11 +20,11 @@ public class TurnOrderAvatar : MonoBehaviour
 
     public void EnableHighlight()
     {
-        this.character.GetComponent<Highlight>().EnableHighlight();
+        this.character.GetComponent<CharacterDetails>().EnableHighlight();
     }
 
     public void DisableHighlight()
     {
-        this.character.GetComponent<Highlight>().DisableHighlight();
+        this.character.GetComponent<CharacterDetails>().DisableHighlight();
     }
 }

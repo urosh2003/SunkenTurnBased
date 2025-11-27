@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
@@ -38,6 +39,8 @@ public class SelectedTilesManager : MonoBehaviour
     public Tile greenTile;
     public Tile greenXTile;
     public List<Character> currentlyTargeting;
+    public Tilemap gridEntitiesDisplay;
+
 
     public readonly Vector3Int[] oddYNeighboursDirectionVectors = new Vector3Int[]{
             new Vector3Int(+1, 0, 0),
@@ -110,7 +113,7 @@ public class SelectedTilesManager : MonoBehaviour
         {
             if (target != null)
             {
-                target.GetComponent<Highlight>().DisableHighlight();
+                target.GetComponent<CharacterDetails>().DisableHighlight();
             }
         }
         currentlyTargeting.Clear();
@@ -151,7 +154,7 @@ public class SelectedTilesManager : MonoBehaviour
                 Character target = GridEntitiesManager.instance.GetCharacterAtTile(startPosition + direction);
                 if (target != null)
                 {
-                    target.GetComponent<Highlight>().EnableHighlight();
+                    target.GetComponent<CharacterDetails>().EnableHighlight();
                     currentlyTargeting.Add(target);
                 }
             }
@@ -168,7 +171,7 @@ public class SelectedTilesManager : MonoBehaviour
         Character target = GridEntitiesManager.instance.GetCharacterAtTile(targetedTile);
         if(target != null)
         {
-            target.GetComponent<Highlight>().EnableHighlight();
+            target.GetComponent<CharacterDetails>().EnableHighlight();
             currentlyTargeting.Add(target);
         }
     }
@@ -230,7 +233,7 @@ public class SelectedTilesManager : MonoBehaviour
             Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos);
             if (target != null)
             {
-                target.GetComponent<Highlight>().EnableHighlight();
+                target.GetComponent<CharacterDetails>().EnableHighlight();
                 currentlyTargeting.Add(target);
                 break;
             }
@@ -267,7 +270,7 @@ public class SelectedTilesManager : MonoBehaviour
                 Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos + basicDirection);
                 if (target != null)
                 {
-                    target.GetComponent<Highlight>().EnableHighlight();
+                    target.GetComponent<CharacterDetails>().EnableHighlight();
                     currentlyTargeting.Add(target);
                 }
             }
@@ -289,11 +292,11 @@ public class SelectedTilesManager : MonoBehaviour
             {
                 if (targetingTilemap.GetTile(pos + basicDirection) == null)
                 {
-                    targetingTilemap.SetTile(pos + basicDirection, redXTile);
+                    targetingTilemap.SetTile(pos + basicDirection, yellowXTile);
                     Character target = GridEntitiesManager.instance.GetCharacterAtTile(pos + basicDirection);
                     if (target != null)
                     {
-                        target.GetComponent<Highlight>().EnableHighlight();
+                        target.GetComponent<CharacterDetails>().EnableHighlight();
                         currentlyTargeting.Add(target);
                     }
                 }
@@ -328,4 +331,59 @@ public class SelectedTilesManager : MonoBehaviour
             selectedTilemap.SetTile(startPosition + direction, null);
         }
     }
+
+    public void DrawEntityTile(Vector3Int tilePosition, GameObject gameObject, GridEntityType gridEntityType)
+    {
+        if (gridEntityType == GridEntityType.CHARACTER) 
+        {
+            if (gameObject.GetComponent<Character>() is PlayerCharacter)
+            {
+                gridEntitiesDisplay.SetTile(tilePosition, greenTile);
+            }
+            else
+            {
+                gridEntitiesDisplay.SetTile(tilePosition, redTile);
+            }
+        }
+    }
+
+    public void RemoveEntityTile(Vector3Int tilePosition)
+    {
+        gridEntitiesDisplay.SetTile(tilePosition, null);
+    }
+
+    public List<Character> lockedHighlightedCharacters;
+    public void LockHighlights()
+    {
+        lockedHighlightedCharacters = new List<Character>();
+        foreach (Character target in currentlyTargeting)
+        {
+            if (target != null)
+            {
+                target.GetComponent<CharacterDetails>().LockAndEnableHighlight();
+                lockedHighlightedCharacters.Add(target);
+            }
+        }
+    }
+    public void UnLockHighlights()
+    {
+        foreach (Character target in lockedHighlightedCharacters)
+        {
+            if (target != null)
+            {
+                StartCoroutine(RemoveHighlight(target));
+            }
+        }
+    }
+    public IEnumerator RemoveHighlight(Character target)
+    {
+        yield return new WaitForSeconds(removeDelay);
+
+        if (target)
+        {
+            target.GetComponent<CharacterDetails>().UnlockAndDisableHighlight();
+        }
+    }
+
+    public float removeDelay = 0.9f;
 }

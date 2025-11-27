@@ -26,6 +26,8 @@ public class TripleAttackAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             Character target = GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile);
             if (target != null)
             {
@@ -40,6 +42,7 @@ public class TripleAttackAction : IAction
                     {
                         target.TakeDamage(damage[i]);
                         this.actor.CharacterAttacked(new List<Character> { target });
+                        await Task.Delay(600);
                     }
                     if(target == null || target.currentHealth <= 0)
                     {
@@ -84,7 +87,7 @@ public class TripleAttackAction : IAction
             !resolving
             )
         {
-            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -94,6 +97,6 @@ public class TripleAttackAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

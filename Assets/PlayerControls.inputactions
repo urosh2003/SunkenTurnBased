@@ -15,6 +15,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "TurnOnHighlights",
+                    "type": "Button",
+                    "id": "d5a6ac1b-e436-4b37-9a35-ad6afe4c3363",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Cancel",
                     "type": "Button",
                     "id": "ebfdd032-9b76-4bd6-8e67-38ff804750a9",
@@ -24,18 +33,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Ability1",
+                    "name": "HitMinigame",
                     "type": "Button",
-                    "id": "f34d7362-bceb-4281-b366-eae59ecf5c0f",
+                    "id": "81ed5a8a-b0ef-4aa7-b8f6-358f28433ed9",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "HitMinigame",
+                    "name": "Ability1",
                     "type": "Button",
-                    "id": "81ed5a8a-b0ef-4aa7-b8f6-358f28433ed9",
+                    "id": "f34d7362-bceb-4281-b366-eae59ecf5c0f",
                     "expectedControlType": "Button",
                     "processors": "",
                     "interactions": "",
@@ -170,17 +179,6 @@
                     "processors": "",
                     "groups": "",
                     "action": "Cancel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c2d1b680-7523-4391-8e3c-983100b33a48",
-                    "path": "<Keyboard>/1",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Ability1",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -324,6 +322,39 @@
                     "processors": "",
                     "groups": "",
                     "action": "Ability13",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "c2d1b680-7523-4391-8e3c-983100b33a48",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Ability1",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "02779e5f-970d-44e1-9530-ca841ce03471",
+                    "path": "<Keyboard>/tab",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TurnOnHighlights",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "788194b0-f43c-4c30-a04c-0290066a2b90",
+                    "path": "<Keyboard>/alt",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "TurnOnHighlights",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

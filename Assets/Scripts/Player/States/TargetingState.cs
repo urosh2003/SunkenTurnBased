@@ -22,20 +22,19 @@ public class TargetingState : IState
 
     public override void Update(Vector3 mouseWorldPosition)
     {
-        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        if (selectedAction.resolving)
         {
-            SelectedTilesManager.instance.ClearTargetingTiles();
             return;
         }
+        
 
         Vector3Int targetedTile = GridEntitiesManager.instance.GetCellFromPosition(mouseWorldPosition);
-
         ActionContext newContext = new ActionContext();
         newContext.targetedTile = targetedTile;
 
-        bool contextUpdated = selectedAction.UpdateContext(newContext);
-        if (contextUpdated)
+        if (!selectedAction.resolving)
         {
+            bool contextUpdated = selectedAction.UpdateContext(newContext);
             SelectedTilesManager.instance.ClearTargetingTiles();
             selectedAction.RedrawTiles();
             SelectedTilesManager.instance.DrawSingle(GridEntitiesManager.instance.GetCellFromPosition(PlayerManager.instance.playerCharacter.transform.position)
@@ -53,6 +52,7 @@ public class TargetingState : IState
 
     public override void Exit()
     {
+        SelectedTilesManager.instance.UnLockHighlights();
         SelectedTilesManager.instance.ClearRangeTiles();
         SelectedTilesManager.instance.ClearTargetingTiles();
     }

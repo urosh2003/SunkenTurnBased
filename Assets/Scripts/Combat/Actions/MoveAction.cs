@@ -35,6 +35,8 @@ public class MoveAction : IAction
         if (actor.currentAP >= APcost && APcost != 0 && !resolving)
         {
             resolving = true;
+            //SelectedTilesManager.instance.LockHighlights();
+
             Vector3 newCharacterPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(actorPosition, path[path.Count-1], GridEntityType.CHARACTER);
 
             if (this.actor.currentFreeMovement > 0)
@@ -43,6 +45,8 @@ public class MoveAction : IAction
                 this.actor.ChangeAP(-APcost);
 
             this.actor.MoveCharacter(newCharacterPosition, true, path.Count);
+            //resolving = false;
+            //SelectedTilesManager.instance.UnLockHighlights(target);
             return true;
         }
         return false;

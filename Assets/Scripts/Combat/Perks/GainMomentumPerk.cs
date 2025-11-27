@@ -37,7 +37,7 @@ public class GainMomentumPerk : Perk
 
     private void GainMomentum(int tilesMoved)
     {
-        lastMomentum = tilesMoved;
+        lastMomentum = currentMomentum;
         currentMomentum += tilesMoved;
     }
 

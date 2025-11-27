@@ -26,6 +26,7 @@ public class BasicAttackAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
             Character target = GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile);
             if (target != null)
             {
@@ -46,6 +47,7 @@ public class BasicAttackAction : IAction
             {
                await CameraActionFocus.instance.MinigameDone();
             }
+            resolving = false;
             return true;
         }
         return false;
@@ -73,7 +75,7 @@ public class BasicAttackAction : IAction
             !resolving
             )
         {
-            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -83,6 +85,6 @@ public class BasicAttackAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

@@ -52,6 +52,8 @@ public class ThrowTorpedoAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             if (actor is PlayerCharacter)
             {
                 await CameraActionFocus.instance.FocusOnPairAsync(actor.transform, GridEntitiesManager.instance.GetCellCenter(context.targetedTile));
@@ -105,16 +107,18 @@ public class ThrowTorpedoAction : IAction
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) <= this.range && !resolving && this.phase == 1 &&
             GridEntitiesManager.instance.DistanceToTile(actorPosition, this.context.targetedTile) >= this.minRange)
         {
-            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (this.phase == 2 &&
-            GridEntitiesManager.instance.DistanceToTile(targetPosition, this.context.targetedTile) <= 1)
+            GridEntitiesManager.instance.DistanceToTile(targetPosition, this.context.targetedTile) <= 1 && !resolving)
         {
+            SelectedTilesManager.instance.DrawSingle(targetPosition, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
             SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving && this.phase == 2)
         {
             SelectedTilesManager.instance.ClearTargetingTiles();
+            SelectedTilesManager.instance.DrawSingle(targetPosition, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -126,13 +130,14 @@ public class ThrowTorpedoAction : IAction
     {
         if (phase == 1)
         {
-            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
-            SelectedTilesManager.instance.DeleteCircle(actorPosition, this.range - this.minRange, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+            SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
+            SelectedTilesManager.instance.DeleteCircle(actorPosition, this.range - this.minRange, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
         }
         else 
         {
+            SelectedTilesManager.instance.ClearRangeTiles();
             SelectedTilesManager.instance.DrawCircle(targetPosition, 1, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
-            SelectedTilesManager.instance.DrawSingle(targetPosition, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.RANGE));
+            SelectedTilesManager.instance.DrawSingle(targetPosition, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.RANGE));
         }
     }
 }

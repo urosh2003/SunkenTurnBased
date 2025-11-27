@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
+using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 
 public class PlayerManager : MonoBehaviour
@@ -14,6 +15,10 @@ public class PlayerManager : MonoBehaviour
     public List<ActionHolder> availableActions = new();
     public List<ActionData> allActionsData = new();
     public int currentActionIndex;
+
+    public static event Action turnOnAllHighlights;
+    public static event Action turnOffAllHighlights;
+    public static event Action<int,int,int> onNewAction;
 
     void Awake()
     {
@@ -50,8 +55,17 @@ public class PlayerManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (MinigameManager.instance.isActive)
+        if (MinigameManager.instance.isActive || (currentState.selectedAction!=null && currentState.selectedAction.resolving))
         {
+            onNewAction?.Invoke(playerCharacter.currentAP, playerCharacter.maxAP, currentState.selectedAction.APcost);
+
+            return;
+        }
+        if (EventSystem.current != null && EventSystem.current.IsPointerOverGameObject())
+        {
+            onNewAction?.Invoke(playerCharacter.currentAP, playerCharacter.maxAP, 0);
+
+            SelectedTilesManager.instance.ClearTargetingTiles();
             return;
         }
         Vector3 screenPosition = Input.mousePosition;
@@ -59,12 +73,24 @@ public class PlayerManager : MonoBehaviour
         Vector3 worldPosition = Camera.main.ScreenToWorldPoint(screenPosition);
 
         currentState.Update(worldPosition);
+        if (currentState.selectedAction != null)
+        {
+            onNewAction?.Invoke(playerCharacter.currentAP, playerCharacter.maxAP, currentState.selectedAction.APcost);
+        }
+        else
+        {
+            onNewAction?.Invoke(playerCharacter.currentAP, playerCharacter.maxAP, 0);
+        }
+    }
+
+    public void UpdateAPUI()
+    {
     }
 
     void ResetState()
     {
         currentActionIndex = 0;
-        currentState = new TargetingState(new MoveAction(playerCharacter));
+        currentState = new DefaultTurnState();
         currentState.Enter();
     }
 
@@ -97,11 +123,10 @@ public class PlayerManager : MonoBehaviour
 
     public void Cancel(InputAction.CallbackContext context)
     {
-        if (context.performed && currentState is not WaitingForTurnState)
+        if (context.performed && currentState is not WaitingForTurnState && !currentState.selectedAction.resolving)
         {
             currentState.Exit();
-            currentState = new TargetingState(new MoveAction(playerCharacter));
-            currentState.Enter();
+            ResetState();
         }
     }
 
@@ -119,8 +144,19 @@ public class PlayerManager : MonoBehaviour
     public void StartTurn()
     {
         currentState.Exit();
-        currentState = new TargetingState(new MoveAction(playerCharacter));
-        currentState.Enter();
+        ResetState();
+    }
+
+    public void Highlights(InputAction.CallbackContext context)
+    {
+        if (context.performed)
+        {
+            turnOnAllHighlights?.Invoke();
+        }
+        if(context.canceled)
+        {
+            turnOffAllHighlights?.Invoke();
+        }
     }
 
     public void Ability1(InputAction.CallbackContext context)

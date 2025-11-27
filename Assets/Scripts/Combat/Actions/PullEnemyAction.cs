@@ -41,6 +41,8 @@ public class PullEnemyAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             Character target = GridEntitiesManager.instance.GetFirstCharacterInDirection(actorPosition, range, direction);
             if (target)
             {
@@ -92,7 +94,7 @@ public class PullEnemyAction : IAction
     {
         if (this.context.targetedTile != null && !resolving)
         {
-            SelectedTilesManager.instance.DrawOneDirection(actorPosition, range, direction, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawOneDirection(actorPosition, range, direction, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if(!resolving)
         {
@@ -102,6 +104,6 @@ public class PullEnemyAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawAllDirections(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+        SelectedTilesManager.instance.DrawAllDirections(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

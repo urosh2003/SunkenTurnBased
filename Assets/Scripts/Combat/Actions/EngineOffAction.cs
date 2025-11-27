@@ -27,6 +27,8 @@ public class EngineOffAction : IAction
             )
         {
             resolving = true;
+            SelectedTilesManager.instance.LockHighlights();
+
             Character target = GridEntitiesManager.instance.GetCharacterAtTile(context.targetedTile);
             if (target != null)
             {
@@ -68,7 +70,7 @@ public class EngineOffAction : IAction
             !resolving
             )
         {
-            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.RED, TileType.XTILE, TileLayer.TARGETING));
+            SelectedTilesManager.instance.DrawSingle(this.context.targetedTile, new TileStyle(TileColor.YELLOW, TileType.XTILE, TileLayer.TARGETING));
         }
         else if (!resolving)
         {
@@ -78,6 +80,6 @@ public class EngineOffAction : IAction
 
     public override void DrawTiles()
     {
-        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.RED, TileType.DEFAULT, TileLayer.RANGE));
+        SelectedTilesManager.instance.DrawCircle(actorPosition, this.range, new TileStyle(TileColor.YELLOW, TileType.DEFAULT, TileLayer.RANGE));
     }
 }

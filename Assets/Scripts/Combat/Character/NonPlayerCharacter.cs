@@ -8,12 +8,12 @@ public class NonPlayerCharacter : Character
     {
         Debug.Log("NPC");
         base.StartTurn();
-        this.gameObject.GetComponent<Highlight>().EnableHighlight();
+        this.gameObject.GetComponent<CharacterDetails>().EnableHighlight();
         this.gameObject.GetComponent<NpcAI>().StartTurn();
     }
     public override void EndTurn()
     {
-        this.gameObject.GetComponent<Highlight>().DisableHighlight();
+        this.gameObject.GetComponent<CharacterDetails>().DisableHighlight();
         base.EndTurn();
     }
 
@@ -25,11 +25,5 @@ public class NonPlayerCharacter : Character
     public override void TakeDamage(int value)
     {
         base.TakeDamage(value);
-        if(currentHealth<=0)
-        {
-            GridEntitiesManager.instance.RemoveGridEntityWorld(this.transform.position, GridEntityType.CHARACTER);
-            TurnManager.instance.RemoveCharacter(this.gameObject);
-            Destroy(this.gameObject);
-        }
     }
 }
