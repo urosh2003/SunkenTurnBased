@@ -66,10 +66,10 @@ public class DefaultTurnState : IState
 
         ActionContext newContext = new ActionContext();
         newContext.targetedTile = targetedTile;
+        bool contextUpdated = selectedAction.UpdateContext(newContext);
 
-        if (!selectedAction.resolving)
+        if (!selectedAction.resolving && contextUpdated)
         {
-            bool contextUpdated = selectedAction.UpdateContext(newContext);
             SelectedTilesManager.instance.ClearTargetingTiles();
             selectedAction.RedrawTiles();
             SelectedTilesManager.instance.DrawSingle(GridEntitiesManager.instance.GetCellFromPosition(PlayerManager.instance.playerCharacter.transform.position)

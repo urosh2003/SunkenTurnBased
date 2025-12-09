@@ -69,7 +69,7 @@ public class WhirlpoolAction : IAction
                 damage.Add(1 + bonusDamage);
 
                 if (results[i])
-                    damage[i] += 1;
+                    damage[i] += minigameBonusDamage;
             }
         }
         return damage;

@@ -8,6 +8,9 @@ public class TurnOrderUI : MonoBehaviour
     public GameObject avatarPrefab;
     public GameObject divider;
     public Sprite defaultAvatar;
+    public int maxAvatars;
+    public int oneRoundAvatars;
+    public int currentAvatars;
 
     private List<TurnOrderAvatar> avatars = new List<TurnOrderAvatar>();
 
@@ -33,20 +36,27 @@ public class TurnOrderUI : MonoBehaviour
     void UpdateTurnOrder()
     {
         ClearAvatars();
+        maxAvatars = TurnManager.instance.turnOrder.Count;
         foreach (Character character in TurnManager.instance.currentTurnOrder)
         {
             GameObject avatarGO = Instantiate(avatarPrefab, avatarsParent);
             TurnOrderAvatar avatar = avatarGO.GetComponent<TurnOrderAvatar>();
             avatar.Initialize(character, defaultAvatar);
             avatars.Add(avatar);
+            currentAvatars++;
         }
+        if (currentAvatars == maxAvatars)
+            return;
         Instantiate(divider, avatarsParent);
         foreach (Character character in TurnManager.instance.turnOrder)
         {
+            if (currentAvatars >= maxAvatars)
+                return;
             GameObject avatarGO = Instantiate(avatarPrefab, avatarsParent);
             TurnOrderAvatar avatar = avatarGO.GetComponent<TurnOrderAvatar>();
             avatar.Initialize(character, defaultAvatar);
             avatars.Add(avatar);
+            currentAvatars++;
         }
         HighlightCurrentTurn(TurnManager.instance.currentTurn);
     }
@@ -61,6 +71,7 @@ public class TurnOrderUI : MonoBehaviour
 
     void ClearAvatars()
     {
+        currentAvatars = 0;
         foreach (Transform child in avatarsParent) Destroy(child.gameObject);
         avatars.Clear();
     }

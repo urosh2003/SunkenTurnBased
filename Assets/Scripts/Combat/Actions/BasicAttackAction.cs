@@ -61,7 +61,7 @@ public class BasicAttackAction : IAction
             List<bool> results = await MinigameManager.instance.PlayMinigameOne();
             if (results[0])
             {
-                damage += 1;
+                damage += minigameBonusDamage;
             }
         }
         return damage + bonusDamage;

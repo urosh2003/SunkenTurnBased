@@ -89,7 +89,7 @@ public class ForceSlamAction : IAction
             List<bool> results = await MinigameManager.instance.PlayMinigameTwo();
             if (results[0])
             {
-                damage += 1;
+                damage += minigameBonusDamage;
             }
             if (results[1])
             {

@@ -49,7 +49,7 @@ public class PlayerManager : MonoBehaviour
 
         this.playerCharacter.activePerks.Add(new PullPerk(this.playerCharacter));
         this.playerCharacter.activePerks.Add(new KillRushPerk(this.playerCharacter, 2));
-        this.playerCharacter.activePerks.Add(new GainMomentumPerk(this.playerCharacter));
+        this.playerCharacter.activePerks.Add(new SkilledPerk(this.playerCharacter));
     }
 
     // Update is called once per frame

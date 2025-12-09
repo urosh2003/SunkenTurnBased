@@ -72,7 +72,7 @@ public class TripleAttackAction : IAction
                 damage.Add(actor.basicAttackDamage + bonusDamage);
                 if(results[i])
                 {
-                    damage[i] += 1;
+                    damage[i] += minigameBonusDamage;
                 }
             }
         }

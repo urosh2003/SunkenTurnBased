@@ -181,7 +181,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5363839842744225281, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: maxAP
-      value: 3
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 5363839842744225281, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: avatar
@@ -189,7 +189,7 @@ PrefabInstance:
       objectReference: {fileID: 21300000, guid: 578744a1c14b53b458cbf3b3698b64d5, type: 3}
     - target: {fileID: 5363839842744225281, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: APPerTurn
-      value: 2
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 5363839842744225281, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: maxHealth
@@ -687,6 +687,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1733988048809914056, guid: 62ee59df7893c9a449f97a79e4be4ae0, type: 3}
+      propertyPath: maxAvatarts
+      value: 5
+      objectReference: {fileID: 0}
     - target: {fileID: 5585551124915940742, guid: 62ee59df7893c9a449f97a79e4be4ae0, type: 3}
       propertyPath: m_Name
       value: TurnOrderCanvas
@@ -3007,11 +3011,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3658023942636140769, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 2.51
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3658023942636140769, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.38
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3658023942636140769, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: m_LocalPosition.z

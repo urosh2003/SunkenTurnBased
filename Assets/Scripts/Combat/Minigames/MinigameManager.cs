@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
@@ -21,6 +22,7 @@ public class MinigameManager : MonoBehaviour
     public float successStartRandomHigh;
 
     private TaskCompletionSource<List<bool>> minigameComplete;
+    public static event Action<List<bool>> minigameDone; 
 
     public bool isActive;
 
@@ -54,12 +56,12 @@ public class MinigameManager : MonoBehaviour
         minigame1.SetActive(true);
         currentMinigame = minigame1.GetComponent<ChainMinigameOne>();
 
-        float randomTotal = timeTotal + Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
-        float randomSuccessStart = randomTotal * Random.Range(successStartRandomLow, successStartRandomHigh);
+        float randomTotal = timeTotal + UnityEngine.Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
+        float randomSuccessStart = randomTotal * UnityEngine.Random.Range(successStartRandomLow, successStartRandomHigh);
         currentMinigame.StartMinigame(randomTotal, randomSuccessStart, randomSuccessStart + randomTotal * 0.1f);
 
         List<bool> results = await minigameComplete.Task;
-
+        minigameDone.Invoke(results);
         isActive = false;
         currentMinigame = null;
 
@@ -75,11 +77,12 @@ public class MinigameManager : MonoBehaviour
         minigame2.SetActive(true);
         currentMinigame = minigame2.GetComponent<ChainMinigameTwo>();
 
-        float randomTotal = timeTotal + Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
-        float randomSuccessStart = randomTotal * Random.Range(successStartRandomLow, successStartRandomHigh);
+        float randomTotal = timeTotal + UnityEngine.Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
+        float randomSuccessStart = randomTotal * UnityEngine.Random.Range(successStartRandomLow, successStartRandomHigh);
         currentMinigame.StartMinigame(randomTotal, randomSuccessStart, randomSuccessStart + randomTotal * 0.1f);
 
         List<bool> results = await minigameComplete.Task;
+        minigameDone.Invoke(results);
 
         isActive = false;
         currentMinigame = null;
@@ -95,11 +98,12 @@ public class MinigameManager : MonoBehaviour
         minigame3.SetActive(true);
         currentMinigame = minigame3.GetComponent<ChainMinigameThree>();
 
-        float randomTotal = timeTotal + Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
-        float randomSuccessStart = randomTotal * Random.Range(successStartRandomLow, successStartRandomHigh);
+        float randomTotal = timeTotal + UnityEngine.Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
+        float randomSuccessStart = randomTotal * UnityEngine.Random.Range(successStartRandomLow, successStartRandomHigh);
         currentMinigame.StartMinigame(randomTotal, randomSuccessStart, randomSuccessStart + randomTotal * 0.1f);
 
         List<bool> results = await minigameComplete.Task;
+        minigameDone.Invoke(results);
 
         isActive = false;
         currentMinigame = null;
@@ -128,11 +132,12 @@ public class MinigameManager : MonoBehaviour
         currentMinigame = minigame4.GetComponent<ChainMinigameFour>();
         minigame4.GetComponent<ChainMinigameFour>().SetSize(size);
 
-        float randomTotal = timeTotal + Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
-        float randomSuccessStart = randomTotal * Random.Range(successStartRandomLow, successStartRandomHigh);
+        float randomTotal = timeTotal + UnityEngine.Random.Range(timeTotalRandomLow, timeTotalRandomHigh);
+        float randomSuccessStart = randomTotal * UnityEngine.Random.Range(successStartRandomLow, successStartRandomHigh);
         currentMinigame.StartMinigame(randomTotal+2, randomSuccessStart, randomSuccessStart + randomTotal * 0.1f);
 
         List<bool> results = await minigameComplete.Task;
+        minigameDone.Invoke(results);
 
         isActive = false;
         currentMinigame = null;
