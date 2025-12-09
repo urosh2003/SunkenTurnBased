@@ -194,7 +194,7 @@ public class GridEntitiesManager : MonoBehaviour
 
     public List<Vector3Int> FindPath(Vector3Int start, Vector3Int goal, GridEntityType gridEntityType)
     {
-        PriorityQueue<Vector3Int> frontier = new PriorityQueue<Vector3Int>();
+        PriorityQueue<Vector3Int> frontier = new PriorityQueue<Vector3Int>();        
         frontier.Add(start, 0);
         Dictionary<Vector3Int, Vector3Int> cameFrom = new Dictionary<Vector3Int, Vector3Int>();
         Dictionary<Vector3Int, float> costToTile = new Dictionary<Vector3Int, float>();

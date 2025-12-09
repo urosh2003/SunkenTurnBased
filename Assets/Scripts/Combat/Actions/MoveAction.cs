@@ -17,7 +17,7 @@ public class MoveAction : IAction
 
     public override bool UpdateContext(ActionContext newContext)
     {
-        if (this.context.Equals(newContext) || resolving)
+        if ((this.context.Equals(newContext) && !newContext.targetedTile.Equals(new Vector3Int())) || resolving)
         {
             return false;
         }
