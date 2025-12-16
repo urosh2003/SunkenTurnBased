@@ -48,6 +48,8 @@ public class PlayerManager : MonoBehaviour
         availableActions.Add(new ActionHolder(this.playerCharacter, typeof(EngineOffAction), allActionsData[11]));
 
         this.playerCharacter.activePerks.Add(new PullPerk(this.playerCharacter));
+        this.playerCharacter.activePerks.Add(new LongerChainsPerk(this.playerCharacter, 1));
+        this.playerCharacter.activePerks.Add(new MoreChainsPerk(this.playerCharacter));
         this.playerCharacter.activePerks.Add(new KillRushPerk(this.playerCharacter, 2));
         this.playerCharacter.activePerks.Add(new SkilledPerk(this.playerCharacter));
     }

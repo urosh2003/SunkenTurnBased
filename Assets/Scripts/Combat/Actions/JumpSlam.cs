@@ -55,7 +55,9 @@ public class JumpSlamAction : IAction
             }
             List<int> damage = await CalculateCooldown();
             target.TakeDamage(damage[0]);
-            if(target)
+            actor.CharacterDamagedEnemy(target, damage[0]);
+
+            if (target)
             {
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);

@@ -41,6 +41,7 @@ public class TripleAttackAction : IAction
                     if (target != null)
                     {
                         target.TakeDamage(damage[i]);
+                        actor.CharacterDamagedEnemy(target, damage[i]);
                         this.actor.CharacterAttacked(new List<Character> { target });
                         await Task.Delay(600);
                     }

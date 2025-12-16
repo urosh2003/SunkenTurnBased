@@ -14,9 +14,10 @@ public class ChargeAction : IAction
         this.actor = actor;
         actorPosition = GridEntitiesManager.instance.GetCellFromPosition(actor.transform.position);
         this.range = 4;
-        this.baseAPcost = 2;
+        this.baseAPcost = 3;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
         this.cooldown = 3;
+        isSkillshot = true;
     }
 
     public override bool UpdateContext(ActionContext newContext)
@@ -61,7 +62,9 @@ public class ChargeAction : IAction
                     target.MoveCharacter(newTargetPosition, false);
                     actor.CharacterMovedSomeone(target, newTargetPosition);
                     target.TakeDamage(damage);
-                    if(target == null || target.currentHealth <= 0)
+                    actor.CharacterDamagedEnemy(target, damage);
+
+                    if (target == null || target.currentHealth <= 0)
                     {
                         actor.CharacterKilledEnemy();
                     }

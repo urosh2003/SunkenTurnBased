@@ -17,6 +17,7 @@ public class PullEnemyAction : IAction
         this.baseAPcost = 2;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
         this.cooldown = 3;
+        isSkillshot = true;
     }
 
     public override bool UpdateContext(ActionContext newContext)

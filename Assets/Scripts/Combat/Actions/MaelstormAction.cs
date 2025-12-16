@@ -54,8 +54,10 @@ public class MaelstormAction : IAction
                 for (int i = 0; i < targets.Count; i++)
                 {
                     targets[i].TakeDamage(damage[i]);
-                }
+                    actor.CharacterDamagedEnemy(targets, damage);
 
+                }
+                actor.CharacterDamagedEnemy(targets, damage);
                 await Task.Delay(200);
                 for (int i = targets.Count-1; i >= 0; i--)
                 {

@@ -19,6 +19,8 @@ public abstract class IAction
     public bool resolving = false;
     public int cooldown;
 
+    public bool isSkillshot = false;
+
     public ActionData actionData;
 
     public abstract Task<bool> Execute();

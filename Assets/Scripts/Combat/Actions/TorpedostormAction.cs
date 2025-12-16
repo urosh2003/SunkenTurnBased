@@ -17,6 +17,7 @@ public class TorpedostormAction : IAction
         this.baseAPcost = 4;
         this.APcost = this.baseAPcost + actor.GetCostModifiers(this);
         this.cooldown = 999;
+        isSkillshot = true;
     }
 
     public override bool UpdateContext(ActionContext newContext)
@@ -72,6 +73,8 @@ public class TorpedostormAction : IAction
                                 actor.CharacterKilledEnemy();
                             }
                         }
+                        actor.CharacterDamagedEnemy(targets, damage);
+
                     }
                     if (currentStep < distance)
                     {

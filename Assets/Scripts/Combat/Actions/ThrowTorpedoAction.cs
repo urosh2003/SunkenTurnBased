@@ -60,7 +60,9 @@ public class ThrowTorpedoAction : IAction
             }
             int damage = await CalculateCooldown();
             target.TakeDamage(damage);
-            if(target && target.currentHealth > 0)
+            actor.CharacterDamagedEnemy(target, damage);
+
+            if (target && target.currentHealth > 0)
             {
                 Vector3 newTargetPosition = GridEntitiesManager.instance.MoveEntityToTilePosition(targetPosition, context.targetedTile, GridEntityType.CHARACTER);
                 target.MoveCharacter(newTargetPosition, false);

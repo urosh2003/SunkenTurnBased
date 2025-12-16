@@ -36,6 +36,7 @@ public abstract class Character : MonoBehaviour
     public event Action OnCharacterKilledEnemy;
     public event Action<int> OnCharacterMove; // How many tiles moved
     public event Action<List<Character>> OnCharacterAttack;
+    public event Action<List<Character>, List<int>> OnCharacterDamagedEnemy;
     public event Action<Character, Vector3> OnCharacterMovedSomeone;
     public event Action<IAction> OnCharacterActed;
     public event Action<IAction> OnCharacterActionInitiated;
@@ -90,6 +91,16 @@ public abstract class Character : MonoBehaviour
     public virtual void CharacterAttacked(List<Character> targets)
     {
         OnCharacterAttack?.Invoke(targets);
+    }
+
+    public virtual void CharacterDamagedEnemy(List<Character> targets, List<int> damage)
+    {
+        OnCharacterDamagedEnemy?.Invoke(targets, damage);
+    }
+
+    public virtual void CharacterDamagedEnemy(Character target, int damage)
+    {
+        OnCharacterDamagedEnemy?.Invoke(new List<Character>(){target}, new List<int>() { damage });
     }
 
     public virtual void CharacterMovedSomeone(Character target, Vector3 newCharacterPosition)

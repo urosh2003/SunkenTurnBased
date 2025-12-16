@@ -72,6 +72,10 @@ public class CharacterDetails : MonoBehaviour
     public void UnlockAndDisableHighlight()
     {
         locked -= 1;
+        if(locked <= 0)
+        {
+            locked = 0;
+        }
         DisableHighlight();
     }
 

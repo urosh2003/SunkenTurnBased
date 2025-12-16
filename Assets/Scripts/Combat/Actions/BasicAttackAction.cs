@@ -36,6 +36,7 @@ public class BasicAttackAction : IAction
                 }
                 int damage = await CalculateDamage();
                 target.TakeDamage(damage);
+                actor.CharacterDamagedEnemy(target, damage);
                 if (target == null || target.currentHealth <= 0)
                 {
                     actor.CharacterKilledEnemy();
