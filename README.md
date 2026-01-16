@@ -1,6 +1,7 @@
 # Primena softverskih obrazaca u razvoju video igre
 
 ## Opis igre
+<img width="1919" height="1083" alt="image" src="https://github.com/user-attachments/assets/9c15b922-5b20-4e70-a3a1-15e51ab0eb50" />
 
 U pitanju je strateška video igra istraživanja ukletog potopljenog broda, zasnovana na potezima.  
 Tabla, po kojoj se igrač kreće je heksagonalni grid, i sve se zasniva na njemu.  
@@ -164,6 +165,24 @@ public class BasicAttackAction : IAction
 
 Veliki broj hook-ova poput CharacterAttacked, CharacterDamagedEnemy itd. je rasporedjen kroz svaku akciju.
 Te hookove ce posle koristiti drugi sistemi o kojima ce biti vise reci posle. 
+
+### Tabela svih Akcija
+
+| Action Name          | Type   | Cost | Targeting        | Range    | Description                                                                 | Cooldown          | Minigame |
+|----------------------|--------|------|------------------|----------|-----------------------------------------------------------------------------|-------------------|----------|
+| Basic Attack         | Attack | 2    | Single target    | Melee    | Deal 6 damage                                                               | None              | 1        |
+| Pull enemy           | Skill  | 2    | Skillshot        | 3 tiles  | Throw your anchor in any direction and pull anything it hits towards you    | 2 turns           | 2        |
+| Pull self            | Skill  | 2    | Single target    | 3 tiles  | Throw your anchor at an unoccupied tile and pull yourself towards it        | 2 turns           | 2        |
+| Whirlpool            | Attack | 2    | AOE              | Melee    | Deal 5 damage to all adjacent enemies                                       | 1 turn            | 3        |
+| Torpedostorm         | Attack | 3    | AOE / Skillshot  | 3 tiles  | Spin up to 3 tiles, dealing 5 damage to adjacent enemies along the way       | Once per combat   | 3        |
+| Maelstrom            | Attack | 3    | AOE              | 2 tiles  | Create a maelstrom that deals 3 damage and pulls enemies toward you          | 1 turn            | 3        |
+| Launch torpedo       | Attack | 3    | Single target    | 2–3 tiles| Deal 5 damage, push enemy back 1 tile, pull yourself to their position      | 2 turns           | 2        |
+| Spare chain          | Skill  | 1    | Single target    | Melee    | Tie up an enemy, preventing movement on their next turn                    | 2 turns           | 1        |
+| Force slam           | Attack | 2    | Single target    | Melee    | Deal 6 damage and push the enemy 1 tile in any direction                    | 2 turns           | 2        |
+| SINK                 | Attack | 3    | Single target    | Melee    | Combo attack dealing 5 damage three times                                   | Once per combat   | 4        |
+| Charge               | Attack | 3    | Skillshot        | 4 tiles  | Launch yourself; on hit deal 6 damage and push enemy back 1 tile            | 3 turns           | 4        |
+| Turn off the engine  | Attack | 0    | Single target    | Melee    | Disable enemy until you act; your next action costs +2 AP                  | 2 turns           | 1        |
+
 
 ### Player
 
@@ -419,6 +438,22 @@ public class KillRushPerk : Perk
 }
 ```
 
+### Tabela svih Perkova
+
+| Perk Name       | Description |
+|-----------------|-------------|
+| Diver’s Curse   | Whenever you move an enemy, mark them. Whenever you deal damage to a marked enemy, deal 4 bonus damage and remove the mark. |
+| Pullmaxxing     | Using **Pull Enemy** makes your next **Pull Self** cost 0 AP. Using **Pull Self** makes your next **Pull Enemy** cost 0 AP. |
+| One Two Punch   | Whenever you move an enemy into your melee range, if your next action is a **Basic Attack**, it costs 0 AP. |
+| Supercharge     | After you move, become **Supercharged**, making your next action deal an additional 3 damage. |
+| Longer Chain    | Increase the range of all melee actions by 1 tile. Increase the range of all skillshot actions to infinite. |
+| Skilled         | Succeeding all minigame checks reduces the action’s cooldown by 1 turn and doubles the bonus damage. |
+| Kill Rush       | Whenever you kill an enemy, restore 2 AP. |
+| Gain Momentum   | Whenever you move, gain 1 stack of **Momentum** per tile moved. When you attack, consume all stacks to deal 1 bonus damage per stack. |
+| MORE CHAINS     | After you damage an enemy, **root** them for 1 turn. |
+
+Svi perkovi funkcionisu medjusobno, sto dovodi do raznih zanimljivih kombinacija.
+
 ### Status Effects
 
 Statusni efekti su slični perkovima, samo što mogu uticati na bilo koga.
@@ -491,6 +526,13 @@ public class StunEffect : StatusEffect
     }
 }
 ```
+### Tabela osnovnih Statusa
+
+| StatusEffect Name| Description |
+|------------------|-------------|
+| Stun    | Can't act on the next turn. |
+| Root      | Can't move on the next turn. |
+| Disarm   | Can't attack on the next turn. |
 
 ### Napomena
 
@@ -504,6 +546,13 @@ To bi bio neki strategy, gde svaki neprijatelj ima svoju logiku koju izvršava n
 a ostatak koda da ostane isti.
 Takodje, svaki put kada igrač izroni i vrati se nazad, neprijatelji postaju čudovišnija verzija sebe, i to tako do 3 puta, te ćemo za svakog neprijatelja imati po 3 verzije.
 Na primeru meduze:
+
+<img width="256" height="256" alt="Jellyfish_1" src="https://github.com/user-attachments/assets/b5b9a22d-62d1-4139-8cb8-83d58e05f8d6" />
+
+<img width="256" height="256" alt="Jellyfish_2" src="https://github.com/user-attachments/assets/43510d3f-8269-4a05-8b39-0765464e7896" />
+
+<img width="256" height="256" alt="Jellyfish_3" src="https://github.com/user-attachments/assets/319249f0-9bf7-4377-b967-4849a02179f3" />
+
 
 Ako imamo sobu punu meduza, u zavisnosti od toga koliko puta je igrac do sada izranjao, treba da stvorimo drukciju meduzu, te bismo tu imali neki EnemyAbstractFactory, koji bi
 instancirao nove neprijatelje, u zavisnosti od toga koji je to neprijatelj koji nam treba, i koliko izopačen on treba da bude (više familija istih klasa) 
