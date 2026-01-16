@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public abstract class IState
+public abstract class IPlayerState
 {
     public IAction selectedAction;
     public abstract void Update(Vector3 mouseWorldPosition);
@@ -10,6 +10,4 @@ public abstract class IState
     public abstract void Exit();
 
     public abstract Task<bool> Execute();
-
-
 }

@@ -9,7 +9,7 @@ using UnityEngine.InputSystem;
 public class PlayerManager : MonoBehaviour
 {
     public static PlayerManager instance;
-    public IState currentState;
+    public IPlayerState currentState;
     public PlayerCharacter playerCharacter;
     [SerializeField] public LayerMask npcLayerMask;
     public List<ActionHolder> availableActions = new();
@@ -83,10 +83,6 @@ public class PlayerManager : MonoBehaviour
         {
             onNewAction?.Invoke(playerCharacter.currentAP, playerCharacter.maxAP, 0);
         }
-    }
-
-    public void UpdateAPUI()
-    {
     }
 
     void ResetState()

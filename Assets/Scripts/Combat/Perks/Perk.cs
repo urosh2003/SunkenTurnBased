@@ -8,10 +8,9 @@ public abstract class Perk
     public Character owner;
     public Character relatedCharacter;
 
-    public Perk(Character character, Character relatedCharacter = null)
+    public Perk(Character character)
     {
         this.owner = character;
-        this.relatedCharacter = relatedCharacter;
         Initialize();
     }
 

@@ -5,7 +5,7 @@ public class PullPerk : Perk
     bool nextPullSelfIsFree;
     bool nextPullEnemyIsFree;
 
-    public PullPerk(Character character, Character relatedCharacter = null) : base(character, relatedCharacter)
+    public PullPerk(Character character) : base(character)
     {
         nextPullSelfIsFree = false;
         nextPullEnemyIsFree = false;

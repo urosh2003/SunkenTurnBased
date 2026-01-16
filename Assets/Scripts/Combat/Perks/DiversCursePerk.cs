@@ -4,7 +4,7 @@ public class DiversCursePerk : Perk
 {
     int damage;
 
-    public DiversCursePerk(Character character, int damage, Character relatedCharacter = null) : base(character, relatedCharacter)
+    public DiversCursePerk(Character character, int damage) : base(character)
     {
         this.damage = damage;
     }

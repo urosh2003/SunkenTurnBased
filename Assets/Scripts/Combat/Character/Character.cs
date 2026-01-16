@@ -11,9 +11,8 @@ public abstract class Character : MonoBehaviour
     public int currentHealth;
 
     public int currentAP;
-    public int APPerTurn;
+    public int perTurnAP;
     public int maxAP;
-
 
     public int maxFreeMovement;
     public int currentFreeMovement;
@@ -120,7 +119,7 @@ public abstract class Character : MonoBehaviour
     public virtual void RefreshResources()
     {
         this.currentFreeMovement = this.maxFreeMovement;
-        this.currentAP += this.APPerTurn;
+        this.currentAP += this.perTurnAP;
         if(currentAP > maxAP)
         {
             currentAP = maxAP;

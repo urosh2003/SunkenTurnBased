@@ -47,7 +47,5 @@ public class SuperchargedPerk : Perk
         owner.OnCharacterMove -= RefreshSupercharge;
         owner.OnCharacterActionInitiated -= AddDamage;
         owner.OnCharacterActed -= CheckForResetBuff;
-
-
     }
 }

@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class TargetingState : IState
+public class TargetingState : IPlayerState
 {
 
     public TargetingState(IAction action)

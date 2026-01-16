@@ -3081,6 +3081,10 @@ PrefabInstance:
       propertyPath: m_Sprite
       value: 
       objectReference: {fileID: 21300000, guid: 344a52c8fb8f0ca45a86e3622df6f4ce, type: 3}
+    - target: {fileID: 6471164242829761510, guid: db7fa40a9617074449836070bf245c24, type: 3}
+      propertyPath: m_WasSpriteAssigned
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7421962901567619478, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: m_LocalScale.x
       value: 1
@@ -3103,7 +3107,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8685720249864457652, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: m_SpriteTilingProperty.pivot.y
-      value: 0.2
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8685720249864457652, guid: db7fa40a9617074449836070bf245c24, type: 3}
       propertyPath: m_SpriteTilingProperty.oldSize.x
@@ -4404,6 +4408,10 @@ PrefabInstance:
     - target: {fileID: 120670963448388757, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: currentAP
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 120670963448388757, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
+      propertyPath: perTurnAP
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 2078371593458610020, guid: dd8a1008ce97bc74983b952013c9a24c, type: 3}
       propertyPath: m_Name

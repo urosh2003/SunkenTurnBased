@@ -1,7 +1,7 @@
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class WaitingForTurnState : IState
+public class WaitingForTurnState : IPlayerState
 {
     public override void Enter()
     {

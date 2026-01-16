@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class DefaultTurnState : IState
+public class DefaultTurnState : IPlayerState
 {
     Character targetedCharacter;
     public DefaultTurnState()

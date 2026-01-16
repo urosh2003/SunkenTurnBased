@@ -12,7 +12,6 @@ public class KillRushPerk : Perk
     public override void Initialize()
     {
         owner.OnCharacterKilledEnemy += RefreshAP;
-
     }
 
     private void RefreshAP()
