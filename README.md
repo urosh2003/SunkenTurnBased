@@ -260,9 +260,40 @@ DefaultTurnState je samo TargetingState u kom je akcija "zakucana" na akciju kre
 WaitingForTurnState samo implementira sve metode apstraktne klase IState, ali u implementaciji ne stoji nikakav kod, jer igrač ni ne može ništa da radi dok čeka svoj potez,
 sem da gleda UI i pomera kameru i sl.
 
+### Prelasci stanja
+
+<img width="461" height="311" alt="Diagram drawio" src="https://github.com/user-attachments/assets/9a4bd03c-40d5-4239-b05b-71bab866b3d6" />
+
+#### Default stanje
+
+Kada igrač dođe na potez, nalaziće se u default stanju, tada može da:
+- Izvrši neku od osnovnih akcija, kretanja ili osnovnog napada. Nakon njih, ponovo se vraća u default stanje, samo što sada ima manje akcionih poena na raspolaganju.
+- Pritisne na keybind ili dugme na ekranu za neku specifičnu akciju. Time ulazi u targeting state te akcije.
+- Završi potez, nakon čeka prelazi u stanje čekanja na potez.
+<img width="1905" height="1079" alt="image" src="https://github.com/user-attachments/assets/1c2d0528-0f45-4915-b062-8f8476d9c19a" />
+Default stanje, igraču je prikazano kroz koja polja će se kretati da bi došao do željenog polja, uz prikazanu cenu tog kretanja (2 polja se kreće, pa je cena 2 AP, prikazano crvenim kružićima)
+
+#### Targeting stanje
+
+Kada igrač odabere koju akciju želi da iskoristi, prelazi u targeting stanje.
+Igrač se priprema da izvrši akciju, i UI mu pomaže da vizualizuje tu akciju, prikazuju mu se domet, metu i cenu te akcije, ukoliko se odluči da je izvrši.
+U targeting stanju, igrač može da:
+- Izvrši akciju koja je u pripremi, vraćajući se u defaultno stanje.
+- Otkaže izvršavanje akcije u pripremi, vraćajući se u defaultno stanje.
+- Pritisne na keybind ili dugme na ekranu za neku drugu akciju. Time ulazi u targeting state te druge akcije.
+- Završi potez, nakon čega prelazi u stanje čekanja na potez.
+<img width="1917" height="1073" alt="image" src="https://github.com/user-attachments/assets/028b0d92-37d4-4451-8977-dc6fab0a21fc" />
+Targeting stanje, igraču je prikazan domet (žuto), trenutna meta (žuti X i crveni higlight na neprijatelju), kao i cena za taj napad (cena za ovu akciju je 2 AP, prikazano crvenim kružićima)
+
+#### Stanje čekanja na potez
+
+Dok igrač čeka na potez, ne može da izvrši nikakvu akciju, može samo da posmatra šta drugi učesnici borbe rade i čeka na svoj potez.
+<img width="1907" height="1077" alt="image" src="https://github.com/user-attachments/assets/16c3b035-77bc-4272-9079-d5b1edf758cb" />
+
+
 ### PlayerManager
 
-PlayerManager je singleton klasa zaslužna je za čuvanje trenutnog stanja, kao i interakciju sa korisničkim input-om.
+PlayerManager je singleton klasa zaslužna je za rukovođenje stanjima, kao i interakciju sa korisničkim input-om.
 Nasledjuje MonoBehaviour abstraktnu klasu, koja je ugradjena klasa u Unity koja omogućava da se skripta zakači na GameObject.
 
 
