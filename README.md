@@ -1,6 +1,7 @@
 # Application of Software Design Patterns in Video Game Development
 
 ## Game Description
+<img width="1919" height="1083" alt="image" src="https://github.com/user-attachments/assets/9c15b922-5b20-4e70-a3a1-15e51ab0eb50" />
 
 This is a turn-based strategy game focused on exploring a haunted sunken ship.
 The board on which the player moves is a hexagonal grid, and the entire gameplay revolves around it.
@@ -100,11 +101,12 @@ Each action defines its own behavior and UI updates, while `TargetingState` simp
 ---
 
 ### State Transitions
+<img width="461" height="311" alt="Diagram drawio" src="https://github.com/user-attachments/assets/9a4bd03c-40d5-4239-b05b-71bab866b3d6" />
 
 #### Default State
 
 When the player's turn begins, they are in the default state. From here, they can:
-
+<img width="1905" height="1079" alt="image" src="https://github.com/user-attachments/assets/1c2d0528-0f45-4915-b062-8f8476d9c19a" />
 * Perform basic movement or a basic attack (after which they return to the default state with reduced AP).
 * Press a keybind or UI button for a specific action, entering its `TargetingState`.
 * End their turn and transition into `WaitingForTurnState`.
@@ -121,6 +123,8 @@ The UI visualizes:
 * The current target
 * The AP cost
 
+<img width="1917" height="1073" alt="image" src="https://github.com/user-attachments/assets/028b0d92-37d4-4451-8977-dc6fab0a21fc" />
+
 In this state, the player can:
 
 * Execute the prepared action (returning to default state)
@@ -133,7 +137,7 @@ In this state, the player can:
 #### Waiting State
 
 While waiting for their turn, the player cannot perform any actions. They can only observe the UI and move the camera.
-
+<img width="1907" height="1077" alt="image" src="https://github.com/user-attachments/assets/16c3b035-77bc-4272-9079-d5b1edf758cb" />
 ---
 
 ### PlayerManager
@@ -234,7 +238,9 @@ An `EnemyAbstractFactory` will instantiate enemies based on:
 * The current evolution stage (based on how many times the player has surfaced)
 
 For example, a jellyfish enemy would have three progressively more monstrous versions.
-
+<img width="256" height="256" alt="Jellyfish_1" src="https://github.com/user-attachments/assets/b5b9a22d-62d1-4139-8cb8-83d58e05f8d6" />
+<img width="256" height="256" alt="Jellyfish_2" src="https://github.com/user-attachments/assets/43510d3f-8269-4a05-8b39-0765464e7896" />
+<img width="256" height="256" alt="Jellyfish_3" src="https://github.com/user-attachments/assets/319249f0-9bf7-4377-b967-4849a02179f3" />
 ---
 
 ## Additional Planned Features
