@@ -48,10 +48,14 @@ public class PlayerManager : MonoBehaviour
         availableActions.Add(new ActionHolder(this.playerCharacter, typeof(EngineOffAction), allActionsData[11]));
 
         this.playerCharacter.activePerks.Add(new PullPerk(this.playerCharacter));
-        this.playerCharacter.activePerks.Add(new LongerChainsPerk(this.playerCharacter, 1));
+        //this.playerCharacter.activePerks.Add(new LongerChainsPerk(this.playerCharacter, 1));
         this.playerCharacter.activePerks.Add(new MoreChainsPerk(this.playerCharacter));
         this.playerCharacter.activePerks.Add(new KillRushPerk(this.playerCharacter, 2));
         this.playerCharacter.activePerks.Add(new SkilledPerk(this.playerCharacter));
+        //this.playerCharacter.activePerks.Add(new DiversCursePerk(this.playerCharacter, 2));
+        //this.playerCharacter.activePerks.Add(new GainMomentumPerk(this.playerCharacter));
+        //this.playerCharacter.activePerks.Add(new QuickPunchPerk(this.playerCharacter));
+        //this.playerCharacter.activePerks.Add(new SuperchargedPerk(this.playerCharacter, 2));
     }
 
     // Update is called once per frame
