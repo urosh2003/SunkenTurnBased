@@ -19,6 +19,7 @@ public class NpcAI : MonoBehaviour
 
     internal void StartTurn()
     {
+        Debug.Log("NPC Turn started");
         ThinkAndAct();       
     }
 
@@ -72,6 +73,8 @@ public class NpcAI : MonoBehaviour
 
     public void ThinkAndAct()
     {
+        Debug.Log("ThinkAndAct called");
+
         StartCoroutine(ThinkAndActCoroutine());
     }
 
@@ -91,8 +94,12 @@ public class NpcAI : MonoBehaviour
 
     async Task ActAsync()
     {
+        Debug.Log("ActAsync called");
+
         if (!this.gameObject.GetComponent<Character>().canAct)
         {
+            Debug.Log("Cant act, ending turn");
+
             EndTurn();
             return;
         }

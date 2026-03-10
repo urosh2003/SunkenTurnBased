@@ -15,11 +15,10 @@ public class GridEntity : MonoBehaviour
 
     void Start()
     {
-        gridEntities = Resources.FindObjectsOfTypeAll<GridEntitiesManager>()
-        .FirstOrDefault();
+        gridEntities = Resources.FindObjectsOfTypeAll<GridEntitiesManager>().FirstOrDefault();
 
-        Vector3Int tilePosition = gridEntities.baseTilemap.WorldToCell(this.transform.position);
-        this.transform.position = gridEntities.baseTilemap.GetCellCenterWorld(tilePosition);
+        Vector3Int tilePosition = gridEntities.GetCellFromPosition(this.transform.position);
+        this.transform.position = gridEntities.GetCellCenter(tilePosition);
 
         gridEntities.AddGridEntity(tilePosition, this.gameObject, this.gridEntityType);
     }
